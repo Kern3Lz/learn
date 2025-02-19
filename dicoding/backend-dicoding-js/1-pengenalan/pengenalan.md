@@ -122,3 +122,109 @@ cache-control: no-cache
 Dari response di atas, kita bisa melihat bahwa pesanan gagal dilakukan. karena kita memesan kopi Luwak yang tidak tersedia. Dan terlihat **status code 404 Not Found**.
 
 ---
+
+# REST WEB Service
+
+REST atau **RE**presentational **S**tate **T**ransfer adalah salah satu gaya arsitektur yang dapat diadaptasi ketika membangun web service.
+
+# REST API
+
+REST juga merupakan API (application program interface) karena ia digunakan untuk menjembatani antara sistem yang berbeda (client dan server).
+
+> API atau Application Program Interface merupakan antarmuka yang menjadi perantara antara sistem aplikasi yang berbeda. API tak hanya dalam bentuk Web Service, bisa saja berupa SDK (Software Development Kit) ataupun lainnya.
+
+Beberapa sifat yang menjadi kunci di dalam REST API:
+
+- Client-Server: Server harus bisa merespons permintaan yang dilakukan client berhasil ataupun gagal. Komunikasi client dan server dilakukan melalui protokol HTTP.
+- Stateless: Seluruh state harus tetap disimpan di client. Artinya, tidak ada session (informasi user yang disimpan) di REST.
+- Cacheable: sebaiknya REST API menerapkan prinsip cache. Sehingga setiap permintaan tidak melulu mengambil dari database.
+- Layered: Client tidak perlu tahu bagaimana server bekerja. Server dapat memiliki beberapa layer yang tidak diketahui oleh client.
+
+4 Poin yang harus diperhatikan ketika membuat REST API:
+
+- Format request dan reponse
+- HTTP Verbs/Methods
+- HTTP Response Code
+- URL Design
+
+---
+
+# Format Request dan Response
+
+Format REST API biasanya menggunakan JSON (JavaScript Object Notation) atau XML (eXtensible Markup Language). JSON lebih sering digunakan karena lebih ringan dan mudah dibaca.
+
+> Sebaiknya gunakan JSON agar lebih mudah dibaca dan efisien dalam transaksi data.
+
+JSON memiliki struktur seperti JavaScript Object yakni menggunakan key-value. Bedanya key pada JSON harus menggunakan tanda kutip dua ("").
+
+Contoh JSON dari url https://coffee-api.dicoding.dev/coffees:
+
+```json
+{
+  "message": "Berikut daftar kopi yang tersedia",
+  "coffees": [
+    {
+      "id": 1,
+      "name": "Kopi Tubruk",
+      "price": 12000
+    },
+    {
+      "id": 2,
+      "name": "Kopi Tarik",
+      "price": 15000
+    },
+    {
+      "id": 3,
+      "name": "Kopi Jawa",
+      "price": 18000
+    }
+  ]
+}
+```
+
+---
+
+# HTTP Verbs/Methods
+
+Kita dapat menggunakan beberapa metode HTTP untuk berinteraksi dengan REST API.
+
+GET untuk mendapatkan data, POST untuk mengirimkan data baru, PUT untuk memperbarui data yang ada, dan DELETE untuk menghapus data. Verbs tersebutlah yang umum digunakan dalam operasi CRUD.
+
+# HTTP Response Code
+
+Status code bernilai 3 digit angka. Status code yang umum digunakan dalam REST API:
+
+- **200** (OK) - Permintaan client berhasil dijalankan oleh server.
+- **201** (Created) - Server berhasil membuat/menambahkan resource yang diminta client.
+- **400** (Bad Request) - Permintaan client gagal dijalankan karena proses validasi input dari client gagal.
+- **401** (Unauthorized) - Permintaan client gagal dijalankan. Biasanya ini disebabkan karena pengguna belum melakukan proses autentikasi.
+- **403** (Forbidden) - Permintaan client gagal dijalankan karena ia tidak memiliki hak akses ke resource yang diminta.
+- **404** (Not Found) - Permintaan client gagal dijalankan karena resource yang diminta tidak ditemukan.
+- **500** (Internal Server Error) - Permintaan client gagal dijalankan karena server mengalami eror (membangkitkan Exception).
+- **503** (Service Unavailable) - Permintaan client gagal dijalankan karena server tidak dapat menangani permintaan.
+
+Lebih detail tentang status code HTTP dapat dilihat di [MDN Status Code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status).
+
+---
+
+# URL Design
+
+URL, Path, atau Endpoint merupakan salah satu bagian terpenting yang harus diperhatikan ketika membangun REST API. Dalam merancang endpoint, ikutilah aturan umum atau convention agar penggunaan API kita memiliki standar yang diharapkan oleh banyak developer.
+
+# Gunakan Kata Benda daripada Kata Kerja dalam Endpoint
+
+Contohnya `/getArticles` atau `/addArticles`. Karena aksi dapat ditentukan secara jelas melalui HTTP Verb (GET, POST, PUT, DELETE). Dengan adanya HTTP verbs Anda cukup memberikan endpoint `GET /articles` untuk mendapatkan data artikel atau `POST /articles` untuk menambahkan artikel.
+
+# Gunakan Kata Jamak pada Endpoint untuk Resource Collection
+
+Contohnya `/articles` atau `/users`. Endpoint ini digunakan untuk mengakses koleksi data yang ada.
+
+Lalu, gunakan kata tunggal untuk mengakses satu data saja. Gunakan path parameter untuk mendapatkan data spesifik. Endpoint `/articles/:id` -> `/articles/1` merupakan contoh yang baik untuk mendapatkan artikel secara spesifik berdasarkan `id`.
+
+# Gunakan Endpoint berantai untuk resource yang punya relasi
+
+Contohnya untuk mendapatkan daftar komentar dari sebuah artikel, endpoint `GET /articles/:id/comments` merupakan contoh yang tepat.
+
+Penggunaan endpoint diatas masuk akal karena kita ingin mendapatkan komentar dari artikel yang memiliki `id` tertentu.
+
+Tidak hanya `GET`, endpoint berantai juga bisa digunakan untuk operasi lainnya seperti `POST`, `PUT`, `DELETE`.
