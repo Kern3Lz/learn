@@ -107,3 +107,120 @@ Ada juga objek yang disebut 'pseudo-globals' yang merupakan objek yang sebenarny
 - `require`: Digunakan untuk mengimpor modul.
 
 ---
+
+# Process Object
+
+Pada Node.js, global objek process memiliki fungsi dan properti yang dapat memberikan informasi mengenai proses yang sedang berjalan.
+
+Yang sering digunakan salah satunya adalah `process.env`. Properti ini berisi informasi mengenai environment yang sedang berjalan. Anda bisa mengetahui informasi seperti direktori, nama host, dan lain sebagainya. [Daftar lengkap properti process.env](https://nodejs.org/dist/latest-v8.x/docs/api/process.html#process_process_env).
+
+Kita juga bisa menyimpan nilai di dalam `process.env` biasanya berguna untuk menentukan alur code seperti if-else di program berdasarkan environment yang sedang berjalan. Contohnya, ketika Anda ingin mengatur environment development dan production.
+
+```javascript
+const http = require("http");
+const hostname = process.env.NODE_ENV !== "production" ? "localhost" : "dicoding.com";
+const port = 3000;
+const requestHandler = (req, res) => {
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "text/plain");
+  res.end("Hello, World!\n");
+};
+const server = http.createServer(requestHandler);
+server.listen(port, hostname, () => {
+  console.log(`Server berjalan pada http://${hostname}:${port}/`);
+});
+```
+
+Cara memberikan nilai di `process.env` adalah dengan memberikannya saat mengeksekusi berkas JS. Jika Linux dan MacOS maka gunakan perintah `NODE_ENV=production node index.js`, sedangkan di Windows gunakan perintah `set NODE_ENV=production && node index.js`.
+
+Nilai ini hanya bisa diakses di proses Node.js. Kita tidak bisa mengaksesnya di program lain atau di luar Node.js.
+
+Objek `process` juga punya fungsi lain, seperti mendapatkan informasi tentang penggunaan memory ketika proses berjalan dengan `process.memoryUsage()`.
+
+```javascript
+const memoryInformation = process.memoryUsage();
+
+console.log(memoryInformation);
+
+/* output
+{
+  rss: 14569472,
+  heapTotal: 2654208,
+  heapUsed: 1788896,
+  external: 855681,
+  arrayBuffers: 9898
+}
+*/
+```
+
+Dan yang penting lainnya yaitu properti `process.argv`. Properti ini dapat menampung nilai baris perintah dalam bentuk array. Contohnya jika kita menjalankan kode `node app.js "harry" "potter"`, maka `process.argv` akan berisi:
+
+- `process.argv[0]`: alamat path dari Node.js
+- `process.argv[1]`: alamat path dari berkas yang dieksekusi
+- `process.argv[2]`: "harry"
+- `process.argv[3]`: "potter"
+
+```javascript
+const firstName = process.argv[2];
+const lastName = process.argv[3];
+
+console.log(`Hello ${firstName} ${lastName}`);
+// Output: Hello harry potter
+```
+
+[Dokumentasi lengkap process object](https://nodejs.org/api/process.html)
+
+## Tantangan: Process Object
+
+Untuk tantangan kali ini, buatlah berkas index.js baru di dalam folder baru process-object pada proyek nodejs-basic.
+
+Kemudian tulislah kode berikut:
+
+```javascript
+const initialMemoryUsage = // TODO 1
+const yourName = // TODO 2
+const environment = // TODO 3
+
+for(let i = 0; i <= 10000; i++) {
+// Proses looping ini akan membuat penggunaan memori naik
+}
+
+const currentMemoryUsage = // TODO 4
+
+console.log(`Hai, ${yourName}`);
+console.log(`Mode environment: ${environment}`)
+console.log(`Penggunaan memori dari ${initialMemoryUsage} naik ke ${currentMemoryUsage}`);
+```
+
+Selesaikan kode yang ditandai TODO dengan ketentuan berikut:
+
+TODO 1 : Isi dengan nilai `heapUsed` dari instance `process.memoryUsage`.
+TODO 2 : Isi dengan nilai index ke-2 dari `process.argv`.
+TODO 3 : Isi dengan nilai `NODE_ENV` dari `process.env`.
+TODO 4 : Isi dengan nilai `heapUsed` dari instance `process.memoryUsage`.
+Setelah mengerjakan seluruh TODO, eksekusi berkas JavaScript dengan perintah:
+
+> SET NODE_ENV=development && node ./process-object/index.js `<Nama Anda> `
+
+Ganti `<Nama Anda>` dengan nama depan Anda. Bila TODO berhasil dikerjakan dengan baik, maka console akan menghasilkan output:
+
+![alt text](image.png)
+
+Jawaban:
+
+```javascript
+const initialMemoryUsage = process.memoryUsage().heapUsed;
+const yourName = process.argv[2];
+const environment = process.env.NODE_ENV;
+for (let i = 0; i <= 10000; i++) {
+  // Proses looping ini akan membuat penggunaan memori naik
+}
+
+const currentMemoryUsage = process.memoryUsage().heapUsed;
+
+console.log(`Hai, ${yourName}`);
+console.log(`Mode environment: ${environment}`);
+console.log(`Penggunaan memori dari ${initialMemoryUsage} naik ke ${currentMemoryUsage}`);
+```
+
+---
