@@ -224,3 +224,167 @@ console.log(`Penggunaan memori dari ${initialMemoryUsage} naik ke ${currentMemor
 ```
 
 ---
+
+# Modularization
+
+Jika kode dituliskan dalam satu berkas saja, maka akan sangat sulit untuk membaca serta memelihara kode tersebut. **Idealnya, satu berkas JavaScript hanya memiliki satu tanggung jawab saja.**
+
+Anda bisa membagikan nilai variabel, objek, class, atau apa pun itu antar modul. Untuk melakukannya, Anda perlu mengekspor nilai pada module tersebut.
+
+Untuk mengekspornya, simpanlah nilai tersebut pada properti `module.exports`. Contoh seperti ini:
+
+```javascript Coffee.js
+const coffee = {
+  name: "Tubruk",
+  price: 15000,
+};
+
+module.exports = coffee;
+```
+
+Setelah itu nilai `coffee`dapat digunakan pada berkas JavaScript lain dengan cara mengimpor nilainya melalui fungsi global `require()`. Contoh:
+
+```javascript App.js
+const coffee = require("./coffee");
+
+console.log(coffee);
+
+/**
+ * node app.js
+ *
+ * output:
+ * { name: 'Tubruk', price: 15000 }
+ */
+```
+
+Ingat! Jika Anda hendak mengimpor modul lokal (local module), selalu gunakan tanda `./` di awal alamatnya ya.
+
+Bila berkas coffee.js diletakkan di folder yang berbeda dengan app.js, contohnya memiliki struktur seperti ini:
+
+`root folder:` <br/>
+`├── app.js` <br/>
+`├── package.json` <br/>
+`└── lib` <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`└── coffee.js`
+
+Maka kita perlu mengimpornya dengan alamat yang sesuai:
+
+```javascript App.js
+const coffee = require("./lib/coffee");
+```
+
+Kita juga bisa menggunakan `../` untuk mengakses folder di atasnya atau kelar dari satu level folder.
+
+```javascript App.js
+const coffee = require("../lib/coffee");
+```
+
+Dalam impor dan ekspor nilai kita bisa menggunakan object literal dan object destructuring untuk mengimpor lebih dari satu nilai. Contohnya seperti ini:
+
+```javascript user.js
+const firstName = "Harry";
+const lastName = "Potter";
+
+/* gunakan object literal
+untuk mengekspor lebih dari satu nilai. */
+module.exports = { firstName, lastName };
+```
+
+```javascript app.js
+/**
+ * Gunakan object destructuring untuk mengimpor lebih dari satu nilai pada modul.
+ */
+const { firstName, lastName } = require("./user");
+
+console.log(firstName);
+console.log(lastName);
+
+/**
+ * output:
+ * Harry
+ * Potter
+ */
+```
+
+Ada 3 jenis modul di Node.js:
+
+- **local module**: modul yang kita buat sendiri.
+- **core module**: modul bawaan Node.js yang ada di folder lib yang terpasang di komputer dan bisa digunakan dimanapun.
+- **third-party module**: modul yang dibuat oleh pihak ketiga dan dipasang dengan Node Package Manager. Dan akan disimpan di folder node_modules.
+
+## Latihan: Modularization
+
+Buat folder baru dengan nama modularization pada proyek nodejs-basic dan di dalamnya buat tiga berkas JavaScript baru yakni Tiger.js, Wolf.js, dan index.js.
+
+![alt text](image-1.png)
+
+Kemudian tulislah kode berikut:
+
+```javascript Tiger.js
+class Tiger {
+  constructor() {
+    this.strength = Math.floor(Math.random() * 100);
+  }
+
+  growl() {
+    console.log("grrrrr!");
+  }
+}
+
+// TODO 1
+```
+
+```javascript Wolf.jsclass Wolf {
+  constructor() {
+    this.strength = Math.floor(Math.random() * 100);
+  }
+
+  howl() {
+    console.log('owooooo!')
+  }
+}
+
+// TODO 2
+```
+
+```javascript index.js
+const Tiger = // TODO 3
+const Wolf = // TODO 4
+
+const fighting = (tiger, wolf) => {
+  if(tiger.strength > wolf.strength) {
+    tiger.growl();
+    return;
+  }
+
+  if(wolf.strength > tiger.strength) {
+    wolf.howl();
+    return;
+  }
+
+  console.log('Tiger and Wolf have same strength');
+}
+
+const tiger = new Tiger();
+const wolf = new Wolf();
+
+fighting(tiger, wolf);
+```
+
+Selesaikan kode yang ditandai TODO dengan ketentuan berikut:
+
+- **TODO 1** : Ekspor class Tiger agar dapat digunakan pada berkas JavaScript lain.
+- **TODO 2** : Ekspor class Wolf agar dapat digunakan pada berkas JavaScript lain.
+- **TODO 3** : Import class Tiger dari berkas Tiger.js.
+- **TODO 4** : Import class Wolf dari berkas Wolf.js.
+
+Setelah selesai mengerjakan TODO, eksekusi berkas index.js dengan perintah:
+
+```
+node ./modularization/index.js
+```
+
+Dan outpunya akan seperti ini:
+![alt text](image-2.png)
+
+---
