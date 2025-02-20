@@ -83,3 +83,27 @@ node index.js
 Maka akan muncul output `Hello JavaScript`.
 
 ---
+
+# Node.js Global Project
+
+Objek window pada browser dan objek global pada Node.js merupakan Global Object. Seluruh fungsi atau properti yang menjadi member dari global object dapat diakses di mana saja alias memiliki cakupan global. Untuk mengetahui fungsi atau properti apa saja yang dimiliki oleh global object, Anda bisa mengetikkan `global` pada NodeREPL.
+
+```javascript
+> Object.getOwnPropertyNames(global);
+```
+
+Objek yang bernama 'true globals' diantaranya:
+
+- `global`: Global namespace. Member apa pun dalam global namespace dapat diakses di mana saja.
+- `process`: Objek proses yang berjalan.
+- `console`: Fungsionalitas STDIO.
+- `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`: Fungsi untuk mengatur waktu.
+
+Ada juga objek yang disebut 'pseudo-globals' yang merupakan objek yang sebenarnya bukan global, tetapi dapat diakses di mana saja. Objek tersebut diantaranya:
+
+- `module`: Digunakan untuk mengakses informasi tentang modul saat ini.
+- `__filename`: Nama file yang sedang dieksekusi.
+- `__dirname`: Direktori dari file yang sedang dieksekusi.
+- `require`: Digunakan untuk mengimpor modul.
+
+---
