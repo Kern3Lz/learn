@@ -388,3 +388,175 @@ Dan outpunya akan seperti ini:
 ![alt text](image-2.png)
 
 ---
+
+# Node Package Manager (NPM)
+
+NPM bisa memasang atau menghapus third party modul. Modul yang dipasang ada di node_modules.
+
+Hindari pemasangan modul secara global karena akan menyebabkan banyak masalah. Sebaiknya gunakan npx bila Anda ingin menjalankan Node.js package di mana pun Anda inginkan.
+
+Contohnya memasang MomentJS dengan
+
+```bash
+npm install moment
+```
+
+Dan kita bisa module moment di project kita dengan
+
+```javascript
+const moment = require("moment");
+
+const date = moment().format("MMM Do YY");
+console.log(date);
+
+/**
+ * output:
+ * Tanggal hari ini dalam format: Sep 22nd 21
+ */
+```
+
+Dan module yang dipasang bisa dilihat di package.json bagian `dependencies`. Dan bisa dihapus dengan perintah `npm uninstall nama_modul`. NPM juga bisa menjalankan script dengan perintah `npm run nama_script`, biasanya untuk menjelankan node.js process seperti environment development atau production.
+
+```json
+"scripts": {
+  "start-dev": "SET NODE_ENV=development && node app.js", // tergantung OS yang digunakan
+  "start": "SET NODE_ENV=production && node app.js",
+}
+```
+
+## Latihan: Node Package Manager (NPM)
+
+Latihan ini akan memasang module lodash dan di file index.js tulis kode berikut:
+
+```javascript
+const _ = // TODO
+
+const myOddEvenArray = _.partition([1, 2, 3, 4, 5, 6], (n) => n % 2);
+
+console.log(myOddEvenArray);
+```
+
+Tugasnya:
+
+- Pasang package lodash pada proyek nodejs-basic.
+- Gunakan package lodash pada TODO sehingga index.js dapat dieksekusi dengan baik.
+
+Bila Anda telah mengerjakan semuanya dengan benar, eksekusi berkas **index.js** dengan perintah:
+
+```bash
+node ./node-package-manager/index.js
+```
+
+Dan outputnya akan seperti ini:
+![alt text](image-3.png)
+
+---
+
+# Events
+
+Node.js biasanya punya pola event-driven atau alur berdasarkan suatu kejadian. Node.js menggunakan EventEmitter untuk mengimplementasikan pola ini.
+
+```javascript
+const EventEmitter = require("events");
+
+const myEventEmitter = new EventEmitter();
+```
+
+Setiap instance dari EventEmiiter punya fungsi on, dan kita bisa menentukan aksi dari kejadian.
+
+```javascript
+const { EventEmitter } = require {'events'};
+
+const myEventEmitter = new EventEmitter();
+
+// fungsi yang akan dijalankan ketika event coffee-order terjadi
+const makeCoffee = ({ name }) => {
+    console.log(`Kopi ${name} telah dibuat!`);
+};
+
+// mendaftarkan fungsi makeCoffee sebagai listener event coffee-order
+myEventEmitter.on('coffee-order', makeCoffee);
+```
+
+Fungsi on menerima dua argumen yang pertama nama event nya dan kedua adalah fungsi yang akan dijalankan ketika event terjadi atau disebut listener. Dari kode diatas berarti ketika event coffee-order terjadi maka fungsi `makeCoffee` akan dijalankan.
+
+> Nama event biasanya bebas. Namun, sebaiknya gunakan nama yang jelas dan mudah dipahami. Dan sebaiknya gunakan (-) untuk memisahkan kata.
+
+Untuk memanggil event gunakan fungsi `emit()`.
+
+```javascript
+const { EventEmitter } = require("events");
+
+const myEventEmitter = new EventEmitter();
+
+const makeCoffee = ({ name }) => {
+  console.log(`Kopi ${name} telah dibuat!`);
+};
+
+myEventEmitter.on("coffee-order", makeCoffee);
+
+// Memicu event 'coffee-order' terjadi.
+myEventEmitter.emit("coffee-order", { name: "Tubruk" });
+```
+
+Emit() bisa menerima argumen kedua, ketiga, dan seterusnya yang akan diteruskan ke listener. Yang dimana argumen pertama adalah nama event.
+
+Listener juga bisa didaftarkan lebih dari satu.
+
+```javascript
+const { EventEmitter } = require("events");
+
+const myEventEmitter = new EventEmitter();
+
+const makeCoffee = ({ name }) => {
+  console.log(`Kopi ${name} telah dibuat!`);
+};
+
+const makeBill = ({ price }) => {
+  console.log(`Bill sebesar ${price} telah dibuat!`);
+};
+
+myEventEmitter.on("coffee-order", makeCoffee);
+myEventEmitter.on("coffee-order", makeBill);
+
+myEventEmitter.emit("coffee-order", { name: "Tubruk", price: 15000 });
+
+/**
+ * output:
+ * Kopi Tubruk telah dibuat!
+ * Bill sebesar 15000 telah dibuat!
+ */
+```
+
+Atau bisa juga menggunakan fungsi khusus untuk menangani event yang biasa disebut 'handler' atau 'listener'.
+
+```javascript
+const { EventEmitter } = require("events");
+
+const myEventEmitter = new EventEmitter();
+
+const makeCoffee = (name) => {
+  console.log(`Kopi ${name} telah dibuat!`);
+};
+
+const makeBill = (price) => {
+  console.log(`Bill sebesar ${price} telah dibuat!`);
+};
+
+const onCoffeeOrderedListener = ({ name, price }) => {
+  makeCoffee(name);
+  makeBill(price);
+};
+
+myEventEmitter.on("coffee-order", onCoffeeOrderedListener);
+
+myEventEmitter.emit("coffee-order", { name: "Tubruk", price: 15000 });
+
+/**
+ * output:
+ * Kopi Tubruk telah dibuat!
+ * Bill sebesar 15000 telah dibuat!
+ */
+```
+
+## Latihan: Events
