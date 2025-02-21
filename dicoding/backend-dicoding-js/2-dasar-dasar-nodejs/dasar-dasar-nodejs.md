@@ -694,3 +694,145 @@ console.log(data);
 ```
 
 ---
+
+# Readable Stream
+
+Jika kita ingin membaca file yang besar, kita bisa menggunakan Readable Stream. Readable Stream akan membaca file secara perlahan-lahan dan tidak membebani memori. Dan cara memakainya adalah dengan menggunakan method `fs.createReadStream()`.
+
+```javascript
+const fs = require("fs");
+
+const readableStream = fs.createReadStream("./article.txt", {
+  highWaterMark: 10,
+});
+
+readableStream.on("readable", () => {
+  try {
+    process.stdout.write(`[${readableStream.read()}]`);
+  } catch (error) {
+    // catch the error when the chunk cannot be read.
+  }
+});
+
+readableStream.on("end", () => {
+  console.log("Done");
+});
+```
+
+Fungsi `fs.createReadStream()` menerima dua argumen, yang pertama adalah lokasi file yang akan dibaca dan yang kedua adalah opsi konfigurasi. Opsi konfigurasi ini bisa berupa `highWaterMark` yang merupakan batas maksimum buffer yang akan dibaca dengan nilai default 16384 bytes (16kb).
+
+> Buffer di dalam stream adalah memori sementara yang digunakan oleh stream dalam menyimpan data hingga data tersebut dikonsumsi.
+
+`createReadStream()` akan mengembalikan `EventEmitter`, yang berguna untuk lister setiap event readable dan end. readable akan aktif ketika buffer sudah memiliki ukuran sesuai dengan nilai yang ditetapkan pada properti `highWatermark`, dan end akan aktif ketika proses pembacaan file selesai.
+
+Buatlah file `article.txt` dengan isi:
+
+```text
+Stream di Node.js
+
+Teknik stream merupakan salah satu konsep fundamental yang mendukung aplikasi Node.js bekerja. Teknik ini dapat menangani kasus baca tulis berkas, komunikasi jaringan, atau beban kerja apapun agar dapat berjalan dengan lebih efisien.
+```
+
+Outputnya akan seperti ini:
+
+```bash
+[Stream di ][Node.js
+
+][Teknik str][eam merupa][kan salah ][satu konse][p fundamen][tal yang m][endukung a][plikasi No][deJS beker][ja. Teknik][ ini dapat][ menangani][ kasus bac][a tulis be][rkas, komu][nikasi jar][ingan, ata][u beban ke][rja apapun][ agar dapa][t berjalan][ dengan le][bih efisie][n.][null]Done
+```
+
+---
+
+# Writable Stream
+
+Untuk menggunakan Writable Stream, kita bisa menggunakan method `fs.createWriteStream()`.
+
+```javascript
+const fs = require("fs");
+
+const writableStream = fs.createWriteStream("output.txt");
+```
+
+Fungsi ini menerima argumen yaitu alamat file untuk menyimpan data nya, jika tidak ada file maka akan otomatis dibuat, tapi jika sudah ada maka akan menimpa isi file.
+
+Gunakan `write()` untuk menulis data di writeable stream
+
+```javascript
+const fs = require("fs");
+
+const writableStream = fs.createWriteStream("output.txt");
+
+writableStream.write("Ini merupakan teks baris pertama!\n");
+writableStream.write("Ini merupakan teks baris kedua!\n");
+writableStream.end("Akhir dari writeable stream!"); // end digunakan untuk tanda akhir dari stream
+```
+
+Outputnya akan seperti ini:
+
+```bash
+Ini merupakan teks baris pertama!
+Ini merupakan teks baris kedua!
+Akhir dari writable stream!
+```
+
+## Latihan: Stream
+
+Buat folder baru dengan nama stream dan di dalamnya buat file index.js dan input.txt.
+
+Dan buat starter code berikut:
+
+```javascript input.txt
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```
+
+```javascript index.js
+/**
+ * TODO:
+ * Buatlah program untuk membaca teks input.txt dan menuliskannya ulang pada berkas output.txt
+ * menggunakan teknik readable stream dan writable stream.
+ */
+```
+
+Tugasnya yaitu membuat program baca dan tulis ulang teks dari stream dengan ketentuan:
+
+- Teks yang dibaca oleh readable stream berukuran 15 karakter tiap bagiannya. Tentukan nilai highWaterMark pada readable stream.
+- Tulis ulang teks dengan menggunakan teknik writeable stream di output.txt. Untuk tiap baris baru pisahkan dengan ('\n')
+
+Solusi:
+
+```javascript
+/**
+ * TODO:
+ * Buatlah program untuk membaca teks input.txt dan menuliskannya ulang pada berkas output.txt
+ * menggunakan teknik readable stream dan writable stream.
+ */
+
+const fs = require("fs");
+
+const readableStream = fs.createReadStream("input.txt", { highWaterMark: 15 });
+
+const writeableStream = fs.createWriteStream("output.txt");
+
+readableStream.on("readable", () => {
+  try {
+    writeableStream.write(`${readableStream.read()}\n`);
+  } catch (error) {
+    console.log("Bang error!");
+  }
+});
+
+readableStream.on("end", () => {
+  writeableStream.end("Akhir dari writeable"); // end digunakan untuk tanda akhir dari stream, dan ketika end dijalankan maka stream akan ditutup dan tidak bisa ditulis lagi. end juga bisa berada di dalam event readable.
+  console.log("Done");
+});
+```
+
+Bisa juga menggunakan path.resolve untuk menentukan path file.
+
+```javascript
+const readableStream = fs.createReadStream(path.resolve(__dirname, "input.txt"), { highWaterMark: 15 });
+
+const writeableStream = fs.createWriteStream(path.resolve(__dirname, "output.txt"));
+```
+
+[Video Dasar Dasar Node.js](https://youtu.be/_qN02jvqvLo)
