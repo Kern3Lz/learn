@@ -616,3 +616,81 @@ myEmitter.emit("birthday", "Suken");
 ```
 
 ---
+
+# Filesystem
+
+Sandboxing melindungi kita dari program jahat serta tindakan pencurian yang dapat merampas privasi penggunanya.
+
+Node.js menyediakan core modules fs yang dapat mempermudah kita dalam mengakses filesystem. Setiap method yang ada di module fs tersedia dalam dua versi, yakni versi asynchronous (default) dan versi synchronous.
+
+Untuk mengakses file akan menggunakan `fs.readFile()` dengan menerima tiga arguman taitu lokasi file, encoding, dan callback.
+
+```javascript
+const fs = require("fs");
+
+const fileReadCallback = (error, data) => {
+  if (error) {
+    console.log("Gagal membaca berkas");
+    return;
+  }
+  console.log(data);
+};
+
+fs.readFile("todo.txt", "UTF-8", fileReadCallback);
+```
+
+Kita juga bisa menggunakan method versih synchronous dengan menambahkan `Sync` di belakang methodnya. `fs.readFileSync().`
+
+```javascript
+const fs = require("fs");
+
+const data = fs.readFileSync("todo.txt", "UTF-8");
+console.log(data);
+```
+
+## Latihan: Filesystem
+
+Buat folder baru dengan nama filesystem dan di dalamnya buat file index.js dan notes.txt.
+
+Tulis Starter Code berikut:
+
+```javascript notes.txt
+Di hari minggu saya akan:
+1. Berolahraga pagi.
+2. Membersihkan halaman rumah.
+3. Menonton film.
+4. Membaca buku Laskar Pelangi.
+```
+
+```javascript index.js
+// TODO: tampilkan teks pada notes.txt pada console.
+```
+
+Tugasnya yaitu menampilkan teks pada notes.txt pada console menggunakan filesystem.
+
+Bila Anda telah mengerjakan semuanya dengan benar, eksekusi berkas index.js dengan perintah:
+
+```bash
+node ./filesystem/index.js
+```
+
+Jika berhasil, maka outputnya akan seperti ini:
+![alt text](image-5.png)
+
+**Tips**: Bisa gunakan method
+
+```javascript
+path.resolve(__dirname, "notes.txt");
+```
+
+Jawaban:
+
+```javascript
+const fs = require("fs");
+const path = require("node:path");
+
+const data = fs.readFileSync(path.resolve(__dirname, "notes.txt"), "UTF-8");
+console.log(data);
+```
+
+---
