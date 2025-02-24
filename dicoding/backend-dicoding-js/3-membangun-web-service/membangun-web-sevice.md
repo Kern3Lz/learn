@@ -264,3 +264,68 @@ Coba request lagi dengan cURL dan hasilnya akan sesuai:
 ```
 
 ---
+
+# Routing Request
+
+Request ke `http://localhost:5000/about` akan mengarahkan ke halaman about sedangkan request ke `http://localhost:5000/` akan mengarahkan ke home page. Routing merupakan istilah dalam menentukan respons server berdasarkan path atau url yang diminta oleh client. Caranya dengan menggunakan properti `url` pada objek `request`.
+
+```javascript
+const requestListener = (request, response) => {
+  const { url } = request;
+};
+```
+
+Properti akan return berupa path contohnya `http://localhost:5000/about/`, maka url akan bernilai `/about`; bila meminta alamat atau `http://localhost:5000/`, maka url akan bernilai `/`. Cara menangani url nya seperti ini:
+
+```javascript
+const requestListener = (request, response) => {
+  const { url } = request;
+
+  if (url === "/") {
+    // curl http://localhost:5000/
+  }
+
+  if (url === "/about") {
+    // curl http://localhost:5000/about
+  }
+
+  // curl http://localhost:5000/<any>
+};
+```
+
+Kita juga bisa mengombinasikan dengan method request.
+
+```javascript
+if (url === "/") {
+  if (method === "GET") {
+    // curl -X GET http://localhost:5000/
+  }
+
+  // curl -X <any> http://localhost:5000/
+}
+```
+
+## Latihan Routing Request
+
+Buatlah web server dengan ketentuan berikut
+
+- URL: '/'
+- - Method: GET
+- - - Response: `<h1>Ini adalah homepage</h1>`
+- - Method `<any>` (selain GET)
+- - - Response: `<h1>Halaman tidak dapat diakses dengan <any> request</h1>`
+- URL: '/about'
+- - Method: GET
+- - - Response: `<h1>Halo! Ini adalah halaman about</h1>`
+- - Method: POST
+- - - Response: `<h1>Halo, <name>! Ini adalah halaman about</h1>`
+- - Method <any> (selain POST dan GET)
+- - - Response: `<h1>Halaman tidak dapat diakses dengan <any> request</h1>`
+
+- URL: `<any>` (selain / dan /about)
+- - Method: `<any>`
+- - - Response: `<h1>Halaman tidak ditemukan!</h1>`
+
+```javascript
+
+```
