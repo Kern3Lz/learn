@@ -179,4 +179,86 @@ curl -X DELETE http://localhost:5000
 # output: <h1>Salam!</h1>
 ```
 
+---
+
 # Body Request
+
+`http.clientRequest` adalah turunan dari readbale stream, yang mana untuk mendapat data body akan sedikit sulit dibanding data header. Di teknik stream kita mendapat data dari `EventEmitter` sedangkan di `http.clientRequest` evnt `data` dan `end` yang digunakan untuk mendapat data body.
+
+```javascript
+const requestListener = (request, response) => {
+  let body = [];
+
+  request.on("data", (chunk) => {
+    body.push(chunk);
+  });
+
+  request.on("end", () => {
+    body = Buffer.concat(body).toString();
+  });
+};
+```
+
+Penjelasan:
+
+- Pendeklarasian variabel `body` sebagai array kosong untuk emnampung buffer pada stream.
+- Lalu, ketika event `data`terjadi di request kita isi array body dengan chunk(potongan data) yang dibawa callback function.
+- Dan ketika stream berakhir maka event `end` akan dipanggil. Di sinilah kita mengubah variabel `body` yang berisi array buffer menjadi string dengan `Buffer.concat(body).toString().`
+
+## Latihan mendapat Body Request
+
+Latihan ini akan mendapatkan body request ketika client mengirim req dengan `POST`.
+
+Buatlah web server yang merespon method `POST` ketika client mengirimkan nama "Dicoding", maka respons akan menampilkan "Hai, Dicoding!".
+
+```javascript
+{"name": "Dicoding"}
+```
+
+Buka file server.js dan hapus method `PUT` dan `DELETE` agar lebih fokus ke POST. lalu tambahkan kode berikut:
+
+```javascript
+if (method === "POST") {
+  let body = [];
+
+  request.on("data", (chunk) => {
+    body.push(chunk);
+  });
+
+  request.on("end", () => {
+    body = Buffer.concat(body).toString();
+    response.end(`<h1>Hai, ${body}!</h1>`);
+  });
+}
+```
+
+Dan jalankan server.js lalu coba request ke server dengan cURL:
+
+```bash
+curl -X POST -H "Content-Type: application/json" http://localhost:5000 -d "{\"name\": \"Dicoding\"}"
+# output: <h1>Hai, {"name": "Dicoding"}!</h1>
+```
+
+Outputnya tidak sesuai dengan apa yang kita inginkan jadi kita perlu mengubahnya dengan `JSON.parse(body)`.
+
+```javascript
+if (method === "POST") {
+  let body = [];
+
+  request.on("data", (chunk) => {
+    body.push(chunk);
+  });
+
+  request.on("end", () => {
+    body = Buffer.concat(body).toString();
+    const { name } = JSON.parse(body);
+    response.end(`<h1>Hai, ${name}!</h1>`);
+  });
+}
+```
+
+Coba request lagi dengan cURL dan hasilnya akan sesuai:
+
+```html
+<h1>Hai, Dicoding!</h1>
+```
