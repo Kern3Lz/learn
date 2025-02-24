@@ -401,13 +401,13 @@ const requestListener = (request, response) => {
 
 Jalankan server.js dan coba request ke server dengan cURL:
 
-```javascript
+```bash
 curl -X GET http://localhost:5000/home
-// output: <h1>Halaman tidak ditemukan!</h1>
+# output: <h1>Halaman tidak ditemukan!</h1>
 curl -X GET http://localhost:5000/hello
-// output: <h1>Halaman tidak ditemukan!</h1>
+# output: <h1>Halaman tidak ditemukan!</h1>
 curl -X GET http://localhost:5000/test
-// output: <h1>Halaman tidak ditemukan!</h1>
+# output: <h1>Halaman tidak ditemukan!</h1>
 ```
 
 Satu todo sudah selesai, sekarang kita akan menangani url `/` dan `/about`. URL `/` hanya bisa diakses dengan method `GET` selain itu akan merespon "Halaman tidak dapat diakses dengan `<any>` request", `<any>` adalah method selain `GET`:
@@ -436,13 +436,13 @@ if (url === "/") {
 
 Jalankan server dan coba request ke server dengan cURL:
 
-```javascript
+```bash
 curl -X GET http://localhost:5000
-// output: <h1>Ini adalah homepage</h1>
+# output: <h1>Ini adalah homepage</h1>
 curl -X POST http://localhost:5000
-// output: <h1>Halaman tidak dapat diakses dengan POST request</h1>
+# output: <h1>Halaman tidak dapat diakses dengan POST request</h1>
 curl -X DELETE http://localhost:5000
-// output: <h1>Halaman tidak dapat diakses dengan DELETE request</h1>
+# output: <h1>Halaman tidak dapat diakses dengan DELETE request</h1>
 ```
 
 Dua todo sudah selesai, dan terakhir kita akan menangani /about, yang dimana hanya bisa diakses dengan method `GET` dan `POST` selain itu akan merespon "Halaman tidak dapat diakses dengan `<any>` request":
@@ -499,15 +499,15 @@ Gunakan source code dari latihan sebelumnya dan jadikan komentar kode yang tidak
 
 Dan jalankan server.js dan coba request ke server dengan cURL:
 
-```javascript
+```bash
 curl -X GET http://localhost:5000/about
-// output: <h1>Halo! Ini adalah halaman about</h1>
+# output: <h1>Halo! Ini adalah halaman about</h1>
 curl -X POST -H "Content-Type: application/json" http://localhost:5000/about -d "{\"name\": \"Dicoding\"}"
-// output: <h1>Halo, Dicoding! Ini adalah halaman about</h1>
+# output: <h1>Halo, Dicoding! Ini adalah halaman about</h1>
 curl -X PUT http://localhost:5000/about
-// output: <h1>Halaman tidak dapat diakses menggunakan PUT request</h1>
+# output: <h1>Halaman tidak dapat diakses menggunakan PUT request</h1>
 curl -X DELETE http://localhost:5000/about
-// output: <h1>Halaman tidak dapat diakses menggunakan DELETE request</h1>
+# output: <h1>Halaman tidak dapat diakses menggunakan DELETE request</h1>
 ```
 
 Full source code:
@@ -563,3 +563,116 @@ server.listen(port, host, () => {
 ---
 
 # Response Status Code
+
+Macam status code yang sering digunakan:
+
+- 100 - 199: informational responses.
+- **200 - 299: successful responses.**
+- 300-399 : redirect.
+- **400-499 : client error.**
+- **500-599 : server errors.**
+
+Explore lebih lanjut di [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+Penetapan nilai status code dengan menggunakan response.statusCode.
+
+```javascript
+const requestListener = (request, response) => {
+  // memberitahu client bahwa request resource yang diminta tidak ada.
+  response.statusCode = 404;
+};
+```
+
+Biasanya status code selalu diiringi dengan status message. Contoh **200 Ok, 400 Bad Request, dan 404 Not Found**. Melalui status message ini kita dan juga client bisa paham maksud dari status kode. Dan message ini bisa diubah dengan `response.statusMessage`.
+
+```javascript
+const requestListener = (request, response) => {
+  response.statusCode = 404;
+
+  // 404 defaultnya adalah 'not found'
+  response.statusMessage = "User is not found";
+};
+```
+
+Sebaiknya kita tidak mengubah status message karena sudah ada standar yang berlaku.
+
+## Latihan Response Status Code
+
+Web server yang kita buat sebelumnya belum memberikan status code pada responsnya dan akan selalu ber status **200 OK**. Kita bisa buktikan dengan:
+
+```bash
+curl -X GET http://localhost:5000/about -i
+
+curl -X GET http://localhost:5000/test -i
+
+curl -X DELETE http://localhost:5000/ -i
+```
+
+![alt text](image.png)
+
+Semua respons berstatus 200 OK, ini akan membuat client bingung. Kita akan memberikan status code yang sesuai seperti ketika client meminta resource yang tidak ditemukan (404 Not Found) atau menggunakan method request yang tidak tepat (400 Bad Request).
+
+Buka kembali `server.js` dan hapus bagian ini:
+
+```javascript
+response.statusCode = 200;
+```
+
+Kita akan sesuaikan status code satu per satu sebelum sintkas `response.end()`. Dan disesuaikan kasus kasusnya. Contohnya, bila halaman tidak ditemukan, beri nilai **404** pada status code; bila halaman tidak bisa diakses menggunakan method tertentu, beri nilai **400** pada status code; sisanya, bila request berhasil dilakukan, beri nilai **200** pada status code. Yuk kita eksekusi!.
+
+```javascript
+const requestListener = (request, response) => {
+  response.setHeader("Content-Type", "text/html");
+
+  const { method, url } = request;
+
+  if (url === "/") {
+    if (method === "GET") {
+      response.statusCode = 200;
+      response.end("<h1>Ini adalah homepage</h1>");
+    } else {
+      response.statusCode = 400;
+      response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
+    }
+  } else if (url === "/about") {
+    if (method === "GET") {
+      response.statusCode = 200;
+      response.end("<h1>Halo! Ini adalah halaman about</h1>");
+    } else if (method === "POST") {
+      let body = [];
+
+      request.on("data", (chunk) => {
+        body.push(chunk);
+      });
+
+      request.on("end", () => {
+        body = Buffer.concat(body).toString();
+        const { name } = JSON.parse(body);
+        response.statusCode = 200;
+        response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
+      });
+    } else {
+      response.statusCode = 400;
+      response.end(`<h1>Halaman tidak dapat diakses menggunakan ${method} request</h1>`);
+    }
+  } else {
+    response.statusCode = 404;
+    response.end("<h1>Halaman tidak ditemukan!</h1>");
+  }
+};
+```
+
+Jalankan dengan `npm run start` dan coba request ke server dengan cURL:
+
+```bash
+curl -X GET http://localhost:5000/about -i
+
+curl -X GET http://localhost:5000/test -i
+
+curl -X DELETE http://localhost:5000/ -i
+```
+
+Dan sekarang server akan memberikan status yang sesuai:
+![alt text](image-1.png)
+
+---
