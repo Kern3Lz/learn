@@ -824,7 +824,7 @@ readableStream.on("readable", () => {
 readableStream.on("end", () => {
   writeableStream.end("Akhir dari writeable"); // end digunakan untuk tanda akhir dari stream, dan ketika end dijalankan maka stream akan ditutup dan tidak bisa ditulis lagi. end juga bisa berada di dalam event readable.
   console.log("Done");
-});
+});m
 ```
 
 Bisa juga menggunakan path.resolve untuk menentukan path file.
