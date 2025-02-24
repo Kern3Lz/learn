@@ -326,6 +326,240 @@ Buatlah web server dengan ketentuan berikut
 - - Method: `<any>`
 - - - Response: `<h1>Halaman tidak ditemukan!</h1>`
 
-```javascript
+Gunakan source code dari latihan sebelumnya dan jadikan komentar kode yang tidak diperlukan, lalu tambahkan properti url di dalam requestListener.:
 
+```javascript
+const http = require("http");
+
+const requestListener = (request, response) => {
+  response.setHeader("Content-Type", "text/html");
+  response.statusCode = 200;
+
+  const { method, url } = request; // tambahkan properti url
+
+  // if(method === 'GET') {
+  //     response.end('<h1>Hello!</h1>');
+  // }
+
+  // if(method === 'POST') {
+  //     let body = [];
+
+  //     request.on('data', (chunk) => {
+  //         body.push(chunk);
+  //     });
+
+  //     request.on('end', () => {
+  //         body = Buffer.concat(body).toString();
+  //         const { name } = JSON.parse(body);
+  //         response.end(`<h1>Hai, ${name}!</h2>`);
+  //     });
+  // }
+};
 ```
+
+Sekarang kita sudah dapat nilai `url` dari `request`. Dan sekarang tambhakan logic sesuai routing dengan if else:
+
+```javascript
+const requestListener = (request, response) => {
+  response.setHeader("Content-Type", "text/html");
+  response.statusCode = 200;
+
+  const { method, url } = request;
+
+  if (url === "/") {
+    // TODO 2: logika respons bila url bernilai '/'
+  } else if (url === "/about") {
+    // TODO 3: logika respons bila url bernilai '/about'
+  } else {
+    // TODO 1: logika respons bila url bukan '/' atau '/about'
+  }
+
+  /** Kode komentar disembunyikan agar lebih ringkas */
+};
+```
+
+Kita akan kerjakan sesuai urutan todo, pertama kita akan menangani url selain `/` dan `/about`. Jika url selain itu maka akan merespon `<h1>Halaman tidak ditemukan!</h1>`.:
+
+```javascript
+const requestListener = (request, response) => {
+  response.setHeader("Content-Type", "text/html");
+  response.statusCode = 200;
+
+  const { method, url } = request;
+
+  if (url === "/") {
+    // TODO 2: logika respons bila url bernilai '/'
+  } else if (url === "/about") {
+    // TODO 3: logika respons bila url bernilai '/about'
+  } else {
+    response.end("<h1>Halaman tidak ditemukan!</h1>");
+  }
+
+  /** Kode komentar disembunyikan agar lebih ringkas */
+};
+```
+
+Jalankan server.js dan coba request ke server dengan cURL:
+
+```javascript
+curl -X GET http://localhost:5000/home
+// output: <h1>Halaman tidak ditemukan!</h1>
+curl -X GET http://localhost:5000/hello
+// output: <h1>Halaman tidak ditemukan!</h1>
+curl -X GET http://localhost:5000/test
+// output: <h1>Halaman tidak ditemukan!</h1>
+```
+
+Satu todo sudah selesai, sekarang kita akan menangani url `/` dan `/about`. URL `/` hanya bisa diakses dengan method `GET` selain itu akan merespon "Halaman tidak dapat diakses dengan `<any>` request", `<any>` adalah method selain `GET`:
+
+```javascript
+if (url === "/") {
+  if (method === "GET") {
+    // response bila client menggunakan GET
+  } else {
+    // response bila client tidak menggunakan GET
+  }
+}
+```
+
+Dan berikan respons sesuai dengan ketentuan:
+
+```javascript
+if (url === "/") {
+  if (method === "GET") {
+    response.end("<h1>Ini adalah homepage</h1>");
+  } else {
+    response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
+  }
+}
+```
+
+Jalankan server dan coba request ke server dengan cURL:
+
+```javascript
+curl -X GET http://localhost:5000
+// output: <h1>Ini adalah homepage</h1>
+curl -X POST http://localhost:5000
+// output: <h1>Halaman tidak dapat diakses dengan POST request</h1>
+curl -X DELETE http://localhost:5000
+// output: <h1>Halaman tidak dapat diakses dengan DELETE request</h1>
+```
+
+Dua todo sudah selesai, dan terakhir kita akan menangani /about, yang dimana hanya bisa diakses dengan method `GET` dan `POST` selain itu akan merespon "Halaman tidak dapat diakses dengan `<any>` request":
+
+```javascript
+else if(url === '/about') {
+        if(method === 'GET') {
+            // respons bila client menggunakan GET
+        } else if(method === 'POST') {
+            // respons bila client menggunakan POST
+        } else {
+            // respons bila client tidak menggunakan GET ataupun POST
+        }
+    }
+```
+
+Dan blok else terakhir akan merespon sesuai ketentuan
+
+```javascript
+else if(url === '/about') {
+        if(method === 'GET') {
+            // respons bila client menggunakan GET
+        } else if(method === 'POST') {
+            // respons bila client menggunakan POST
+        } else {
+            response.end(`<h1>Halaman tidak dapat diakses menggunakan ${method} request</h1>`);
+      }
+    }
+```
+
+Gunakan source code dari latihan sebelumnya dan jadikan komentar kode yang tidak diperlukan, lalu tambahkan properti url di dalam requestListener.:
+
+```javascript
+ else if (url === '/about') {
+       if (method === 'GET') {
+         response.end('<h1>Halo! Ini adalah halaman about</h1>')
+       } else if (method === 'POST') {
+         let body = [];
+
+         request.on('data', (chunk) => {
+           body.push(chunk);
+         });
+
+         request.on('end', () => {
+           body = Buffer.concat(body).toString();
+           const {name} = JSON.parse(body);
+           response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
+         });
+     } else {
+       response.end(`<h1>Halaman tidak dapat diakses menggunakan ${method} request</h1>`);
+     }
+   }
+```
+
+Dan jalankan server.js dan coba request ke server dengan cURL:
+
+```javascript
+curl -X GET http://localhost:5000/about
+// output: <h1>Halo! Ini adalah halaman about</h1>
+curl -X POST -H "Content-Type: application/json" http://localhost:5000/about -d "{\"name\": \"Dicoding\"}"
+// output: <h1>Halo, Dicoding! Ini adalah halaman about</h1>
+curl -X PUT http://localhost:5000/about
+// output: <h1>Halaman tidak dapat diakses menggunakan PUT request</h1>
+curl -X DELETE http://localhost:5000/about
+// output: <h1>Halaman tidak dapat diakses menggunakan DELETE request</h1>
+```
+
+Full source code:
+
+```javascript
+const http = require("http");
+
+const requestListener = (request, response) => {
+  response.setHeader("Content-Type", "text/html");
+  response.statusCode = 200;
+
+  const { method, url } = request;
+
+  if (url === "/") {
+    if (method === "GET") {
+      response.end("<h1>Ini adalah homepage</h1>");
+    } else {
+      response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
+    }
+  } else if (url === "/about") {
+    if (method === "GET") {
+      response.end("<h1>Halo! Ini adalah halaman about</h1>");
+    } else if (method === "POST") {
+      let body = [];
+
+      request.on("data", (chunk) => {
+        body.push(chunk);
+      });
+
+      request.on("end", () => {
+        body = Buffer.concat(body).toString();
+        const { name } = JSON.parse(body);
+        response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
+      });
+    } else {
+      response.end(`<h1>Halaman tidak dapat diakses menggunakan ${method} request</h1>`);
+    }
+  } else {
+    response.end("<h1>Halaman tidak ditemukan!</h1>");
+  }
+};
+
+const server = http.createServer(requestListener);
+
+const port = 5000;
+const host = "localhost";
+
+server.listen(port, host, () => {
+  console.log(`Server berjalan pada http://${host}:${port}`);
+});
+```
+
+---
+
+# Response Status Code
