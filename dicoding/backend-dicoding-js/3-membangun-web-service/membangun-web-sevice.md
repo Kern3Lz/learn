@@ -676,3 +676,35 @@ Dan sekarang server akan memberikan status yang sesuai:
 ![alt text](image-1.png)
 
 ---
+
+# Response Header
+
+Server bisa merespons dengan memberikan data dalam tipe (MIME types) lain, seperti XML, JSON, gambar, atau sekadar teks biasa. Apa pun MIME types yang digunakan, web server wajib memberi tahu pada client. Caranya yaitu dengan menggunakan `response.setHeader()`.
+
+Eksplore lebih lanjut tentang MIME types di [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types)
+
+Data di header bisa ditetapkan sebanyak mugnkin dan method `setHeader()` menerima dua parameter yaitu nam properti dan nilai untuk headernya.
+
+```javascript
+const requestListener = (request, response) => {
+  response.setHeader("Content-Type", "text/html");
+  response.setHeader("Powered-By", "Node.js");
+};
+// Penulisan properti header ditulis dengan Proper Case atau tiap awal kata diawali dengan huruf besar. dan dipisah dengan tanda strip (-).
+```
+
+## Latihan mengubah dan menambah nilai header response
+
+Di latihan ini kita akna mengubah format HTML menjadi JSON dan menambahkan properti `Powered-By` pada header response untuk memberitahu client teknologi apa yang kita gunakan.
+
+Sekarang buka file `server.js` dan ubah bagian `response.setHeader` menjadi application/json. Dan tambahkan `Powered-By` dengan nilai `Node.js`.:
+
+```javascript
+response.setHeader("Content-Type", "application/json");
+response.setHeader("Powered-By", "Node.js");
+```
+
+Simpan dan jalankan, dan seharusnya hasilnya akan seperti ini:
+![alt text](image-2.png)
+
+Karena server tidak lagi mengirimkan konten dalam bentuk HTML, maka browser tidak akan lagi menampilkan dalam bentuk HTML. Coba buka `http://localhost:5000` melalui browser. Sekarang konten HTML tidak lagi ter-render dan harus kita ubah formatnya menjadi json.
