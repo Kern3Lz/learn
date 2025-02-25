@@ -871,3 +871,27 @@ Framework yang lainnya seperti Hapi punya environment yang lengkap untuk web ser
 Kelemahan Hapi adalah abstraksinya yang terlalu jauh dari Node.js native. Kita perlu belajar secara dalam, untuk menguasai framework ini.
 
 Kita akan menggunakan Hapi untuk membuat web server dengan Node.js dengan spesifikasi yang sama seperti latihan sebelumnya. Tapi tidak mendalam dan untuk eksplore lebih lanjut bisa ke [Hapi.js](https://hapi.dev/tutorials/?lang=en_US)
+
+# Membangun Web Server menggunakan Hapi
+
+## Menyiapkan Porject
+
+Buat folder baru dengan nama `hapi-web-server` di dalam folder `javascript-projects`. Buka folder tersebut dengan VSCode dan buka terminal, kemudian inisialisasi project dengan perintah `npm init -y`.
+
+Dan atur NPM runner di package.json
+
+```json
+"scripts": {
+  "start": "node server.js"
+}
+```
+
+Lalu, buat file server.js dengan isi:
+
+```javascript
+console.log("Halo, kita akan belajar membuat server menggunakan Hapi");
+```
+
+Simpan dan jalankan server.js dengan perintah `npm run start`. Jika berhasil, maka akan muncul tulisan “Halo, kita akan belajar membuat server menggunakan Hapi”.
+
+---
