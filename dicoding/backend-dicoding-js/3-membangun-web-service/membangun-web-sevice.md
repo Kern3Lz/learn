@@ -895,3 +895,295 @@ console.log("Halo, kita akan belajar membuat server menggunakan Hapi");
 Simpan dan jalankan server.js dengan perintah `npm run start`. Jika berhasil, maka akan muncul tulisan “Halo, kita akan belajar membuat server menggunakan Hapi”.
 
 ---
+
+# Membuat HTTP Server
+
+Untuk membuat HTTP server Hapi kita tidak menggunakan core module `http` tapi menggunakan modul pihak ketiga `@hapi/hapi`. Install modul tersebut dengan perintah `npm install @hapi/hapi`.
+
+```javascript
+const Hapi = require("@hapi/hapi"); // import modul hapi
+```
+
+Kemudian buat struktur kode untuk HTTP server di Hapi:
+
+```javascript
+const Hapi = require("@hapi/hapi");
+
+const init = async () => {
+  const server = Hapi.server({
+    port: 5000,
+    host: "localhost",
+  });
+
+  await server.start();
+  console.log(`Server berjalan pada ${server.info.uri}`);
+};
+
+init();
+```
+
+HTTP server dibuat dengan `Hapi.server()` dan method ini menerima satu parameter yaitu [Server Options](https://hapi.dev/api/?v=20.1.0#-serveroptions). Di dalamnya kita bisa menentukan **port dan host** yang akan digunakan oleh server.
+
+Proses nya dijalankan dengan `server.start()` dan dilakukan secara asynchronous. Kita harus memanggil `async` dan memanggil `server.start()` dengan `await`. Dan terakhir kita akan menampilkan informasi server yang berjalan dengan `server.info.uri`.
+
+## Latihan Membuat HTTP Server
+
+1. Pasang modul Hapi dengan perintah `npm install @hapi/hapi`. Cek apakah modul tersebut sudah terpasang dengan melihat file `package.json`.
+
+```json
+  "dependencies": {
+    "@hapi/hapi": "^21.3.12"
+  }
+```
+
+2. Buka file `server.js` dan tulis kode berikut:
+
+```javascript
+const Hapi = require("@hapi/hapi");
+
+const init = async () => {
+  const server = Hapi.server({
+    port: 5000,
+    host: "localhost",
+  });
+
+  await server.start();
+  console.log(`Server berjalan pada ${server.info.uri}`);
+};
+
+init();
+```
+
+3. Jalnkan dan cek apakah server berjalan dengan perintah `npm run start`.
+4. Lakukan cURL ke server dengan perintah `curl http://localhost:5000` dan pastikan server berjalan dengan baik.
+
+Hasil yang diharapkan:
+![alt text](image-5.png)
+
+Hapi secara default merespon "Not found" ketika tidak ada request handler yang cocok dengan request yang masuk. Hal ini lebih baik daipada permintaan yang tidak terjawab sama sekali.
+
+---
+
+# Method/Verb Request dan Routing
+
+Sekrang kita akan menambahkan routing agar server bisa merespons permintaan sesuai method dan url.
+
+Routing di Hapi tidak seperti sebelumnya. Namun, menggunakan [route configuration](https://hapi.dev/api/?v=20.1.0#-serverrouteroute) yang bisa kita atur di dalam `server.route()`.
+
+```javascript
+const init = async () => {
+  const server = Hapi.server({
+    port: 5000,
+    host: "localhost",
+  });
+
+  server.route({
+    method: "GET",
+    path: "/",
+    handler: (request, h) => {
+      return "Hello World!";
+    },
+  });
+
+  await server.start();
+  console.log(`Server berjalan pada ${server.info.uri}`);
+};
+```
+
+Objek route configuration punya properti untuk menspesifikasikan route yang diinginkan. Seperti `method`, `path`, dan `handler`.
+
+Lalu, cara menetapkan lebih dari satu config dengan emnggunakan array di dalam `server.route()`.
+
+```javascript
+const init = async () => {
+  const server = Hapi.server({
+    port: 5000,
+    host: "localhost",
+  });
+
+  server.route([
+    {
+      method: "GET",
+      path: "/",
+      handler: (request, h) => {
+        return "Hello World!";
+      },
+    },
+    {
+      method: "GET",
+      path: "/about",
+      handler: (request, h) => {
+        return "About page";
+      },
+    },
+  ]);
+
+  await server.start();
+  console.log(`Server berjalan pada $(server.info.uri)`);
+};
+```
+
+Sebaiknya kita memisahkan handler dari route configuration. Kita bisa membuat handler di luar route configuration dan memanggilnya di dalam route configuration.
+
+```javascript route.js
+const routes = [
+  {
+    method: "GET",
+    path: "/",
+    handler: (request, h) => {
+      return "Homepage";
+    },
+  },
+  {
+    method: "GET",
+    path: "/about",
+    handler: (request, h) => {
+      return "About page";
+    },
+  },
+];
+
+module.exports = routes;
+```
+
+```javascript server.js
+const Hapi = require("@hapi/hapi");
+const routes = require("./routes");
+
+const init = async () => {
+  const server = Hapi.server({
+    port: 5000,
+    host: "localhost",
+  });
+
+  server.route(routes);
+
+  await server.start();
+  console.log(`Server berjalan pada ${server.info.uri}`);
+};
+
+init();
+```
+
+## Latihan Routing
+
+Kita akan membuat server dengan spesifikasi berikut:
+
+- URL: ‘/’
+- - Method: GET
+- - - Mengembalikan pesan “Homepage”.
+- - Method: <any> (selain method GET)
+- - - Mengembalikan pesan “Halaman tidak dapat diakses dengan method tersebut”.
+- URL: ‘/about’
+- - Method: GET
+- - - Mengembalikan pesan “About page”.
+- - Method: <any> (selain method GET)
+- - - Mengembalikan pesan “Halaman tidak dapat diakses dengan method tersebut”.
+- URL: <any> (selain “/’ dan “/about”)
+- - Method: <any>
+- - - Mengembalikan pesan “Halaman tidak ditemukan”.
+
+Buat file JavaScript baru dengan nama `routes.js` dan isi dengan kode berikut:
+
+```javascript
+const routes = [
+  {
+    method: "GET",
+    path: "/",
+    handler: (request, h) => {
+      return "Homepage";
+    },
+  },
+  {
+    method: "*",
+    path: "/",
+    handler: (request, h) => {
+      return "Halaman tidak dapat diakses dengan method tersebut";
+    },
+  },
+  {
+    method: "GET",
+    path: "/about",
+    handler: (request, h) => {
+      return "About page";
+    },
+  },
+  {
+    method: "*",
+    path: "/about",
+    handler: (request, h) => {
+      return "Halaman tidak dapat diakses dengan method";
+    },
+  },
+  {
+    method: "*",
+    path: "/{any*}",
+    handler: (request, h) => {
+      return "Halaman tidak ditemukan";
+    },
+  },
+];
+
+module.exports = routes;
+```
+
+Terlihat di bagian `method` punya nilai '\*' dimana route dapat diakses menggunakan seluruh [method yang ada pada HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods).
+
+Kemudian nilai `/{any*}` di route paling akhir yang berfungsi untuk menangani request di `path` yang belum kita tentukan. Ini adalah teknik routing dinamis dengan Hapi. Perlu diingat bahwa routing dinamis akan kalah prioritas dengan routing statis. Contoh:
+
+```javascript
+const routes = [
+  {
+    method: "*",
+    path: "/",
+    handler: (request, h) => {
+      return "Halaman tidak dapat diakses dengan method tersebut";
+    },
+  },
+  {
+    method: "GET",
+    path: "/",
+    handler: (request, h) => {
+      return "Homepage";
+    },
+  },
+];
+```
+
+Dan hasilnya jika kita request ke `http://localhost:5000/` dengan method `GET` maka yang akan dijalankan adalah route kedua atau outpunya adalah `Homepage`.
+
+Setelah routes config, kita akan mengintegrasikan routes ke dalam server.js:
+
+```javascript
+const Hapi = require("@hapi/hapi");
+const routes = require("./routes"); // import routes
+
+const init = async () => {
+  const server = Hapi.server({
+    port: 5000,
+    host: "localhost",
+  });
+
+  server.route(routes); // mengintegrasikan routes
+
+  await server.start();
+  console.log(`Server berjalan pada ${server.info.uri}`);
+};
+
+init();
+```
+
+Simpan dan jalankan server.js dengan perintah `npm run start`. Coba request ke server dengan cURL:
+
+```bash
+curl -X GET http://localhost:5000
+# output: Homepage
+curl -X GET http://localhost:5000/about
+# output: About page
+curl -X GET http://localhost:5000/test
+# output: Halaman tidak ditemukan
+curl -X POST http://localhost:5000
+# output: Halaman tidak dapat diakses dengan method tersebut
+```
+
+---
