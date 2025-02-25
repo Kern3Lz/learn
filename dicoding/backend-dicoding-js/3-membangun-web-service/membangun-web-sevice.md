@@ -1357,3 +1357,36 @@ curl -X GET http://localhost:5000/hello/dicoding
 ```
 
 ---
+
+# Body/Payload Request
+
+Jika menggunakan Node.js untuk mendapatkan data pada body request meskipun datanya hanya sebatas teks kita harus berurusan dengan ReadableStream. Namun, dengan Hapi kita bisa mendapatkan data body request dengan mudah.
+
+Hapi Secara Default mengubah payload JSON menjadi object Javascript. Jadi tidak perlu `JSON.parse()`.
+
+Kapan pun client mengirim paylod JSON kita bisa akses di route handler dengan `request.payload`.
+
+```javascript
+server.route({
+  method: "POST",
+  path: "/login",
+  handler: (request, h) => {
+    const { username, password } = request.payload;
+    return `Welcome ${username}!`;
+  },
+});
+```
+
+Dari contoh di atas, handler menerimaa payload melalui `request.payload`. Dan client mengirimkan data login dengan struktur:
+
+```json
+{ "username": "harrypotter", "password": "encryptedpassword" }
+```
+
+Request ke /login dengan curl method post:
+
+```bash
+curl -X POST http://localhost:5000/login -H "Content-Type: application/json" -d "{\"username\": \"harrypotter\", \"password\": \"encryptedpassword\"}"
+```
+
+---
