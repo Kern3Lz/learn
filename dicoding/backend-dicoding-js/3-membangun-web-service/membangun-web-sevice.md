@@ -1187,3 +1187,102 @@ curl -X POST http://localhost:5000
 ```
 
 ---
+
+# Path Parameter
+
+URL [https://github.com/dicodingacademy](https://github.com/dicodingacademy) kita tahu bahwa `dicodingacademy` adalah path parameter. Begitu juga dengan [https://twitter.com/maudyayunda](https://twitter.com/maudyayunda) yang mana `maudyayunda` adalah path parameter.
+
+Untuk melakukan ini kita menggunakan teknik Path Paramater ini kita menggunakan `{}` di dalam path. Contoh:
+
+```javascript
+server.route({
+  method: "GET",
+  path: "/users/{username}",
+  handler: (request, h) => {
+    const { username } = request.params;
+    return `Hello, ${username}!`;
+  },
+});
+```
+
+Properti `path` ada bagian `{username}` yang berarti server memberikan bagian teks tersebut untuk client manfaatkan sebagai parameter. Dan parameter ini disimpan di properti `request.params` yang dimiliki handler. Jika kita request ke `http://localhost:5000/users/dicoding` maka outputnya adalah `Hello, dicoding!`.
+
+Jika parameter tidak ada atau `/user` saja maka akan mengalami error. Agar tidak terjadi error kita bisa menambahkan tanda "?" di belakang parameter.
+
+```javascript
+server.route({
+  method: "GET",
+  path: "/users/{username?}",
+  handler: (request, h) => {
+    const { username = "stranger" } = request.params;
+    return `Hello, ${username}!`;
+  },
+});
+```
+
+Sekrang jika kita request ke `http://localhost:5000/users` maka outputnya adalah `Hello, stranger!`. Dan jika kita request ke `http://localhost:5000/users/dicoding` maka outputnya adalah `Hello, dicoding!`. Kita bisa menetapkan nilai default untuk parameter dengan cara seperti ini.
+
+Path parameter bisa lebih dari satu. Tapi penetapan optional path hanya bisa diakhir path saja. Jika ditenpatkan di tengah maka akan dianggap tidak valid oleh Hapi. Contoh: `{one?}/{two}`
+
+## Latihan Path Parameter
+
+Tambahkan handler untuk path parameter
+
+```javascript
+const routes = [
+  {
+    method: "GET",
+    path: "/",
+    handler: (request, h) => {
+      return "Homepage";
+    },
+  },
+  {
+    method: "*",
+    path: "/",
+    handler: (request, h) => {
+      return "Halaman tidak dapat diakses dengan method tersebut";
+    },
+  },
+  {
+    method: "GET",
+    path: "/about",
+    handler: (request, h) => {
+      return "About page";
+    },
+  },
+  {
+    method: "*",
+    path: "/about",
+    handler: (request, h) => {
+      return "Halaman tidak dapat diakses dengan method";
+    },
+  },
+  {
+    method: "GET",
+    path: "/hello/{name?}",
+    handler: (request, h) => {
+      const { name = "stranger" } = request.params;
+      return `Hello, ${name}!`;
+    },
+  },
+  {
+    method: "*",
+    path: "/{any*}",
+    handler: (request, h) => {
+      return "Halaman tidak ditemukan";
+    },
+  },
+];
+
+module.exports = routes;
+```
+
+Jalankan server dan coba request ke server dengan cURL:
+
+```bash
+curl -X GET http://localhost:5000/hello/dicoding
+# output: Hello, dicoding!
+curl -X GET http://localhost:5000/hello
+# output: Hello, stranger!
+```
