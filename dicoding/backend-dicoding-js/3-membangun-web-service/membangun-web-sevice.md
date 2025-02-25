@@ -1390,3 +1390,72 @@ curl -X POST http://localhost:5000/login -H "Content-Type: application/json" -d 
 ```
 
 ---
+
+# Response Toolkit
+
+Handler Hapi punya dua parameters yaitu `request` dan `h`
+
+- `request` parameter akan menampung detail dari request client seperti path dan query parameters, paylod, header, dan sebagainya. [Referensi API Hapi](https://hapi.dev/api/?v=20.1.0#request-properties)
+- `h` adalah huruf insial Hapi. Parameter ini adalah [response toolkit](https://hapi.dev/api/#response-toolkit) dimana h adalah objek yang menampung banyak sekali method yang digunakan untuk menanggap sebuah permintaan client. Kurang lebih mirip dengan objek `response` di request handler ketika menggunakan Node.js native.
+
+Kita bisa membuat response dengan sangat sederhana ketika ada request:
+
+```javascript
+server.route({
+  method: "GET",
+  path: "/",
+  handler: (request, h) => {
+    return `Homepage`;
+  },
+});
+```
+
+Dengan cara tersebut status response selalu bernilai 200 OK. Ketika Anda butuh mengubah nilai status response, di situlah Anda membutuhkan parameter h.
+
+```javascript
+server.route({
+  method: "POST",
+  path: "/user",
+  handler: (request, h) => {
+    return h.response("created").code(201);
+  },
+});
+```
+
+Handler akan selalu return sebuah nilai, maka kita harus menggunakan `h.response()` untuk membuat response. Dan method `code()` digunakan untuk mengubah status code response.
+
+Parameter `h` juga punya method lainnya seperti header response, content type, content length, dan lain sebagainya.
+
+```javascript:
+// Detailed notation
+const handler = (request, h) => {
+    const response = h.response('success');
+    response.type('text/plain');
+    response.header('Custom-Header', 'some-value');
+    return response;
+};
+
+// Chained notation
+const handler = (request, h) => {
+    return h.response('success')
+        .type('text/plain')
+        .header('Custom-Header', 'some-value');
+};
+```
+
+Contoh penggunaan h.response di berkas routes.js:
+
+```javascript
+{
+    method: 'POST',
+    path: '/user',
+    handler: (request, h) => {
+        const {username, password} = request.payload;
+        return h.response(`Halo, ${username}`).code(200);
+    },
+},
+```
+
+Note: Hati hati dalam memberikan status code. Jika status code tidak sesuai dengan keadaan, maka client akan bingung atau terjadi internal server error.
+
+Untuk mendalami nya bisa membaca [halaman dokumentasi](https://hapi.dev/api/?v=20.1.0#response-toolkit).
