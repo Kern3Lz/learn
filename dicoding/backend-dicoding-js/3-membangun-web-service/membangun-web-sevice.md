@@ -1286,3 +1286,74 @@ curl -X GET http://localhost:5000/hello/dicoding
 curl -X GET http://localhost:5000/hello
 # output: Hello, stranger!
 ```
+
+---
+
+# Query Parameters
+
+Query Parameter biasanya digunakan untuk permintaan yang membutuhkan kueri dari client, contohnya seperti pencarian dan filter data. Data yang dikirim melalui quer punya format **key=value**
+
+```javascript
+localhost:5000?name=harry&location=bali
+```
+
+Contoh di atas kita punya dua query param yang pertama `name=harry` dan `location=bali`. Untuk mengakses query param di Hapi kita bisa menggunakan `request.query`.
+
+```javascript
+server.route({
+  method: "GET",
+  path: "/",
+  handler: (request, h) => {
+    const { name, location } = request.query;
+    return `Hello, ${name} from ${location}`;
+  },
+});
+```
+
+## Latihan Query Parameter
+
+Kita akan menambahkan `/hello/{name}` yang sudah dibuat. Jika path tersebut punya kueri `lang` dengan nilai `id`, maka server akna menanggapi dengan "Hai, {name}!".
+
+Buka **routes.js** dan di fungsi handler `GET /hello/{name}` dapatkan nilai kueri lang melalui properti `request.query`.
+
+```javascript
+{
+    method: 'GET',
+    path: '/hello/{name?}',
+    handler: (request, h) => {
+        const { name = "stranger" } = request.params;
+        const { lang } = request.query;
+
+        return `Hello, ${name}!`;
+    },
+},
+```
+
+Lalu, sesuaikan pesan kembalian handler dengan kondisi jika query lang bernilai `id`.
+
+```javascript
+{
+    method: 'GET',
+    path: '/hello/{name?}',
+    handler: (request, h) => {
+        const { name = "stranger" } = request.params;
+        const { lang } = request.query;
+
+        if(lang === 'id') {
+            return `Hai, ${name}!`;
+        }
+        return `Hello, ${name}!`;
+    },
+},
+```
+
+Simpan dan Jalankan server.js dan coba request ke server dengan cURL:
+
+```bash
+curl -X GET http://localhost:5000/hello/dicoding?lang=id
+# output: Hai, dicoding!
+curl -X GET http://localhost:5000/hello/dicoding
+# output: Hello, dicoding!
+```
+
+---
