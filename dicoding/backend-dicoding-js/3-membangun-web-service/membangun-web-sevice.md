@@ -693,7 +693,7 @@ const requestListener = (request, response) => {
 // Penulisan properti header ditulis dengan Proper Case atau tiap awal kata diawali dengan huruf besar. dan dipisah dengan tanda strip (-).
 ```
 
-## Latihan mengubah dan menambah nilai header response
+## Latihan Mengubah dan Menambah Nilai Header Response
 
 Di latihan ini kita akna mengubah format HTML menjadi JSON dan menambahkan properti `Powered-By` pada header response untuk memberitahu client teknologi apa yang kita gunakan.
 
@@ -708,3 +708,166 @@ Simpan dan jalankan, dan seharusnya hasilnya akan seperti ini:
 ![alt text](image-2.png)
 
 Karena server tidak lagi mengirimkan konten dalam bentuk HTML, maka browser tidak akan lagi menampilkan dalam bentuk HTML. Coba buka `http://localhost:5000` melalui browser. Sekarang konten HTML tidak lagi ter-render dan harus kita ubah formatnya menjadi json.
+
+# Response Body
+
+Object `response` yang ada di parameter fungsi request listener adalah instance dari `http.serverResponse`. Di mana ia merupakan `WritableStream`. Cara penulisannya adalah dengan method `response.write()` dan `response.end()`.
+
+```javascript
+const requestListener = (request, response) => {
+  response.write("<html>");
+  response.write("<body>");
+  response.write("<h1>Hello, World!</h1>");
+  response.write("</body>");
+  response.write("</html>");
+  response.end(); // end bisa digunakan untuk menulisa data terakhir sebelum proses penulisan diakhiri.
+};
+
+//Jadi, untuk kasus diatas datapat dipersingkat penulisannnya menjadi seperti ini
+
+const requestListener = (request, response) => {
+  response.end("<html><body><h1>Hello, World!</h1></body></html>");
+};
+```
+
+## Latihan Mengubah Data pada Body Response
+
+Kita akan mengubah konten di body response menjadi JSON.
+
+Ketentuannya, setiap JSON yang akan kita kirimkan harus punya `message`. Value nya akan kita isi dengan pesan yang kita berikan sebelumnya, berikut contohnya:
+
+```json
+{
+  "message": "Halaman tidak ditemukan!"
+}
+```
+
+Sekarang buka file `server.js` dan ubah bagian `response.end()` menjadi JSON seperti ini:
+
+```javascript
+response.end("<h1>Halaman tidak ditemukan!</h1>"); // sebelum
+
+response.end(
+  JSON.stringify({
+    message: "Halaman tidak ditemukan!",
+  })
+); // sesudah
+```
+
+Menggunakan `JSON.stringify()` karena kita menerima string(atau buffer) maka harus diubah object menjadi string.
+
+Simpan dan jalankan server.js, dan coba request ke server dengan cURL:
+
+```bash
+curl -X GET http://localhost:5000/anything
+# output: { "message":"Halaman tidak ditemukan!"}
+curl -X GET http://localhost:5000/test
+# output: { "message":"Halaman tidak ditemukan!"}
+```
+
+Dan sekarang kita akan mengubah semua bagiannya menjadi JSON.:
+
+```javascript
+const requestListener = (request, response) => {
+  response.setHeader("Content-Type", "application/json");
+  response.setHeader("Powered-By", "Node.js");
+
+  const { method, url } = request;
+
+  if (url === "/") {
+    if (method === "GET") {
+      response.statusCode = 200;
+      response.end(
+        JSON.stringify({
+          message: "Ini adalah homepage",
+        })
+      );
+    } else {
+      response.statusCode = 400;
+      response.end(
+        JSON.stringify({
+          message: `Halaman tidak dapat diakses dengan ${method} request`,
+        })
+      );
+    }
+  } else if (url === "/about") {
+    if (method === "GET") {
+      response.statusCode = 200;
+      response.end(
+        JSON.stringify({
+          message: "Halo! Ini adalah halaman about",
+        })
+      );
+    } else if (method === "POST") {
+      let body = [];
+
+      request.on("data", (chunk) => {
+        body.push(chunk);
+      });
+
+      request.on("end", () => {
+        body = Buffer.concat(body).toString();
+        const { name } = JSON.parse(body);
+        response.statusCode = 200;
+        response.end(
+          JSON.stringify({
+            message: `Halo, ${name}! Ini adalah halaman about`,
+          })
+        );
+      });
+    } else {
+      response.statusCode = 400;
+      response.end(
+        JSON.stringify({
+          message: `Halaman tidak dapat diakses menggunakan ${method}, request`,
+        })
+      );
+    }
+  } else {
+    response.statusCode = 404;
+    response.end(
+      JSON.stringify({
+        message: "Halaman tidak ditemukan!",
+      })
+    );
+  }
+};
+```
+
+Jalankan server.js dan coba request ke server dengan cURL:
+
+```bash
+curl -X GET http://localhost:5000/
+# output: {"message":"Ini adalah homepage"}
+curl -X GET http://localhost:5000/about
+# output: {"message":"Halo! ini adalah halaman about"}
+curl -X DELETE http://localhost:5000/
+# output: {"message":"Halaman tidak dapat diakses dengan DELETE request"}
+```
+
+---
+
+# Node.js Web Framework
+
+## Apa itu Web Framework?
+
+Web Framework adalah sebuah kerangka yang dapat membantu mempermudah pengembangan web termasuk dalam membuat web server.
+
+Web Framework menyediakan sekumpulan tools dan library yang dapat menyederhanakan hal-hal yang sering dilakukan dalam pengembangan web, seperti pembuatan server, routing, menangani permintaan, interaksi dengan database, otorisasi, hingga meningkatkan ketahanan web dari serangan luar.
+
+---
+
+# Web Framework di Node.js
+
+Ada banyak web framework yang bisa digunakan dalam pengembangan web dengan Node.js. Kita akan bahas beberapa saja, yaitu:
+![alt text](image-3.png)
+Expressjs merupakan web framework tertua dan terpopuler di Node.js saat ini. Framework ini sangat ringan, mudah diintegrasikan dengan aplikasi web front-end, dan penulisan kodenya tidak jauh beda dengan Node.js native.
+
+Namun karena sifat ringannya tersebut, ia menjadi framework yang unopinionated alias tidak memiliki aturan untuk menggunakannya. **Express tidak menyediakan struktur atau kerangka kerja yang baku untuk diikuti oleh developer.** Sehingga, developer menjadi sulit menentukan seperti apa kode yang optimal.
+
+![alt text](image-4.png)
+Framework yang lainnya seperti Hapi punya environment yang lengkap untuk web server komples. Dengan Hapi kita tidak perlu layer **authentication, tokenize, cors, dan lain sebagainya**
+
+Kelemahan Hapi adalah abstraksinya yang terlalu jauh dari Node.js native. Kita perlu belajar secara dalam, untuk menguasai framework ini.
+
+Kita akan menggunakan Hapi untuk membuat web server dengan Node.js dengan spesifikasi yang sama seperti latihan sebelumnya. Tapi tidak mendalam dan untuk eksplore lebih lanjut bisa ke [Hapi.js](https://hapi.dev/tutorials/?lang=en_US)
