@@ -1459,3 +1459,128 @@ Contoh penggunaan h.response di berkas routes.js:
 Note: Hati hati dalam memberikan status code. Jika status code tidak sesuai dengan keadaan, maka client akan bingung atau terjadi internal server error.
 
 Untuk mendalami nya bisa membaca [halaman dokumentasi](https://hapi.dev/api/?v=20.1.0#response-toolkit).
+
+# Build RESTful API with Hapi
+
+Pada akhirnya, Anda diharapkan bisa membuat server dari [aplikasi catatan sederhana](http://notesapp-v1.dicodingacademy.com/) seperti pada video ini.
+
+Catatan
+Jika Anda akses aplikasi pada tautan di atas, aplikasi tersebut tidak akan berfungsi karena belum ada implementasi dari sisi Back-End. Tugas kita adalah membuat aplikasi Back-End dan membuat aplikasi catatan berfungsi dengan baik.
+
+[Client App - Back End Pemula](https://youtu.be/3mDSdCDHAUU)
+
+## Latihan: Menyiapkan Proyek
+
+1. Buat folder abru dengan nama **"notes-app-back-end"**
+2. Buka terminal
+3. Inisialisasi proyek dengan perintah `npm init -y`
+   Sebelum membuat berkas server.js, kita akan gunakan dua tools yang akan membantu kita dalam pengembangan aplikasi, yaitu:
+   **Nodemon**
+   Tools ini akan memantau perubahan berkas dan secara otomatis merestart server ketika ada perubahan.
+   1. Install Nodemon di `devDependencies` dengan perintah `npm install nodemon --save-dev`
+   2. Untuk memastikan nodemon terpasang buka `package.json` dan lihat apakah nodemon sudah terpasang di `devDependencies`.
+   3. Coba nodemon dengan membuat berkas `server.js` dan tambahkan kode berikut:
+   4. `console.log('Hallo kita akan membuat RESTful API');`
+   5. Kemudian buat script baru di `package.json` dengan nama `start` dan isi dengan `nodemon server.js`
+   6. Jalankan server dengan perintah `npm run start`
+
+## Latihan: Menggunakan ESLint
+
+Tools yang kedua yaitu ESLint untuk membantu penulisan kode yang konsisten dan meminimalisir kesalahan penulisan kode. Kita akan menggunakan styling [Dicoding Academy JavaScript Style Guide](https://github.com/dicodingacademy/javascript-style-guide).
+
+1. Pasang package ESLint di devDependencies dengan `npm init @eslint/config@latest`.
+2. Kemudian Anda akan diberikan beberapa pertanyaan, silakan jawab pertanyaan yang ada dengan jawaban berikut:
+
+- How would you like to use ESLint? -> To check syntax and find problems.
+- What type of modules does your project use? -> CommonJS (require/exports).
+- Which framework does your framework use? -> None of these.
+  Does your project use TypeScript? -> No.
+- Where does your code run? -> Node (pilih menggunakan spasi).
+- Would you like to …… (seluruh pertanyaan selanjutnya) -> Y.
+  Sama seperti package nodemon, setelah berhasil terpasang, package ESlint akan muncul di package.json lebih tepatnya pada devDependencies.
+
+```json
+{
+  "name": "notes-app-back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "eslint": "^9.7.0",
+    "globals": "^15.8.0",
+    "nodemon": "^3.1.4"
+  }
+}
+```
+
+Selain itu akan ada berkas `.eslintrc.json` yang berisi konfigurasi ESLint. Berkas ini bisa diubah sesuai kebutuhan.
+
+3. Kita akan menambahkan style guide Dicoding Academy dengan menjalankan perintah berikut `npm install --save-dev eslint-config-dicodingacademy`
+4. Setelah itu tambahkan config di `.eslintrc.json`:
+
+```javascript
+import daStyle from "eslint-config-dicodingacademy";
+
+export default [
+  daStyle,
+  // other config style
+];
+```
+
+5.  Selanjutnya gunakan ESLint untuk mmmeriksa kode JS yang ada di project, kita perlu menambahkan npm runner berikut di dalam berkas package.json:
+
+```json
+"scripts": {
+  "start": "nodemon server.js",
+  "lint": "eslint ./"
+},
+```
+
+6. Jalankan perintah **npm run lint** di Terminal proyek
+7. Kita juga bisa install ESLint di VSCode. Buka VSCode dan install ekstensi ESLint.
+8. Buka **server.js** di sana akan ada tanda kuning
+   ![alt text](image-6.png)
+   Penggunaan tanda petik dua dianggap sebuah error karena tidak sesuai dengan style guide yang digunakan, dimana style guide tersebut menggunakan tanda petik satu.
+
+---
+
+# Hasil Project
+
+Hasil project bisa dilihat di [notes-app-back-end](notes-app-back-end) dan juga [nodejs-consume-data](nodejs-consume-data)
+
+---
+
+# Same-Origin Policy
+
+Server dapat menampung sebuah website, aplikasi, gambar, video, dan masih banyak lagi. Ketika server menampung website, mungkin beberapa data gambar, video, stylesheet biasanya diambil dari alamat server lain atau origin yang berbeda. Contohnya, stylesheet yang diambil dari Bootstrap CDN ataupun gambar yang diperoleh dari server Unsplash. Hal ini wajar dan biasa dilakukan.
+
+Namun, apakah Anda tahu bahwa tidak semua data bisa diambil dari origin yang berbeda? Contohnya, data JSON yang didapatkan melalui teknik XMLHTTPRequest atau fetch. Jika website meminta sesuatu menggunakan teknik tersebut dari luar origin-nya, permintaan tersebut akan ditolak. Itu disebabkan oleh kebijakan same-origin. Kasus ini terjadi pada aplikasi client dan web server yang kita buat.
+
+Origin terdiri dari tiga hal: protokol, host, dan port number.
+
+Selama aplikasi client mengakses data dari origin yang sama, hal itu dapat dilakukan. Namun, bila ada salah satu saja yang berbeda (misal port 8001), permintaan itu akan ditolak.
+
+Lantas, apa solusi agar keduanya dapat berinteraksi? Tenang, untungnya ada mekanisme yang dapat membuat mereka saling berinteraksi. Mekanisme tersebut disebut Cross-Origin Resource Sharing (CORS).
+
+# Mengonsumsi dan Menggabungkan Data di Node.js
+
+Tahukah Anda? Banyak aplikasi yang kita gunakan di belakang layar sebenarnya tidak hanya berasal dari satu layanan, melainkan berasal dari berbagai layanan yang saling berkomunikasi. Aplikasi yang kita gunakan di belakang layar mengonsumsi data yang berasal dari berbagai sumber, kemudian datanya digabungkan sesuai dengan kebutuhan.
+
+Bagaimana cara satu layanan menemukan dan berkomunikasi dengan layanan lainnya?
+
+Supaya layanan bisa saling berkomunikasi, kita harus menemukan IP address, DNS, atau Port yang ada di server terlebih dahulu. Setelah itu, barulah ia dapat berkomunikasi antar layanan menggunakan protokol HTTP, RPC, dan AMQP.
+
+Node.js memiliki kemampuan untuk mengonsumsi dan menggabungkan data dengan melakukan permintaan HTTP. Anda bisa mengonsumsi data dari suatu layanan REST API dan kemudian menggabungkan data tersebut sebelum dikembalikan sebagai response.
+
+---
+
+Video Web Service menggunakan Node.js
+Untuk memperdalam dan mempermudah pemahaman pada materi ini, Anda dapat menyimak video pembahasan berikut.
+[Web Service menggunakan Node.js](https://youtu.be/K5Un8IZJzWk)
