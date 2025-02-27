@@ -1,0 +1,120 @@
+{
+    "info": {
+        "_postman_id": "f7cb9c42-0393-4fd2-8e0f-e1c19cec3636",
+        "name": "dicoding-backend",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "getNotes",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "localhost:5000/notes",
+                    "path": [
+                        "notes"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000"
+                }
+            }
+        },
+        {
+            "name": "addNotes",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "localhost:5000/notes",
+                    "path": [
+                        "notes"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\r\n    \"title\": \"Catatan A\",\r\n    \"tags\": [\"Android\", \"Web\"],\r\n    \"body\": \"Isi dari catatan A\"\r\n}"
+                }
+            }
+        },
+        {
+            "name": "getNotesById",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "localhost:5000/notes/zoo2qP_960poaEBH",
+                    "path": [
+                        "notes",
+                        "zoo2qP_960poaEBH"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000"
+                }
+            }
+        },
+        {
+            "name": "editNotes",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "localhost:5000/notes/zoo2qP_960poaEBH",
+                    "path": [
+                        "notes",
+                        "zoo2qP_960poaEBH"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\r\n   \"title\": \"Catatan A Revisi\",\r\n   \"tags\": [\"Android\", \"Web\"],\r\n   \"body\": \"Isi dari catatan A revisi\"\r\n}"
+                }
+            }
+        },
+        {
+            "name": "deleteNotes",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "localhost:5000/notes/zoo2qP_960poaEBH",
+                    "path": [
+                        "notes",
+                        "zoo2qP_960poaEBH"
+                    ],
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n   \"title\": \"Catatan A Revisi\",\n   \"tags\": [\"Android\", \"Web\"],\n   \"body\": \"Isi dari catatan A revisi\"\n}"
+                }
+            }
+        }
+    ]
+}
