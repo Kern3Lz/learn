@@ -8,20 +8,18 @@
 6. Di dalamnya tulisakan kode JS berikut:
 
 ```javascript
-console.log("Halo, kita akan belajar membuat server");
+console.log('Halo, kita akan belajar membuat server');
 ```
 
 7. Kemudian buka **package.json** dan buat runner script dengan nama `start` yang berisi `node server.js`. Runner script test bisa dihapus saja.
 8. Save dan jalankan dengan `npm run start`.
-
----
 
 # Membuat HTTP Server
 
 Node.js menyediakan core modules http untuk web server. `const http = require('http');`. Salah satu method pentingnya yaitu `http.createServer()`. Method ini menerima parameter berupa callback function yang akan dijalankan ketika server dijalankan. Callback function tersebut menerima dua parameter yaitu `request` dan `response`.
 
 ```javascript
-const http = require("http");
+const http = require('http');
 
 /**
  * Logika untuk menangani dan menanggapi request dituliskan pada fungsi ini
@@ -38,10 +36,10 @@ Parameter `request` akan berisi informasi terkait permintaan yang dikirimkan ole
 
 ```javascript
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
 
   response.statusCode = 200;
-  response.end("<h1>Halo HTTP Server!</h1>");
+  response.end('<h1>Halo HTTP Server!</h1>');
 };
 ```
 
@@ -56,7 +54,7 @@ Biasasnya ketika `listen()` dipanggil method yang dipakai yaitu `port`, `hostnam
 
 ```javascript
 const port = 5000;
-const host = "localhost";
+const host = 'localhost';
 
 server.listen(port, host, () => {
   console.log(`Server berjalan pada http://${host}:${port}`);
@@ -68,19 +66,19 @@ server.listen(port, host, () => {
 Silakan hapus kode yang ada pada server.js dan ganti dengan kode untuk membuat http server seperti ini:
 
 ```javascript
-const http = require("http");
+const http = require('http');
 
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
 
   response.statusCode = 200;
-  response.end("<h1>Halo HTTP Server!</h1>");
+  response.end('<h1>Halo HTTP Server!</h1>');
 };
 
 const server = http.createServer(requestListener);
 
 const port = 5000;
-const host = "localhost";
+const host = 'localhost';
 
 server.listen(port, host, () => {
   console.log(`Server berjalan pada http://${host}:${port}`);
@@ -88,8 +86,6 @@ server.listen(port, host, () => {
 ```
 
 Jalankan server dengan perintah `npm run start` dan buka browser dengan alamat `http://localhost:5000`. Jika berhasil, maka akan muncul tulisan “Halo HTTP Server!”.
-
----
 
 # Method/Verb Request
 
@@ -112,11 +108,11 @@ Kita bisa memberikan respon yang berbeda dari tipe method yang diaksesnya.
 const requestListener = (request, response) => {
   const { method } = request;
 
-  if (method === "GET") {
+  if (method === 'GET') {
     // response untuk method GET
   }
 
-  if (method === "POST") {
+  if (method === 'POST') {
     // response untuk method GET
   }
 
@@ -131,35 +127,35 @@ const requestListener = (request, response) => {
 Buat server.js dengan isi berikut:
 
 ```javascript
-const http = require("http");
+const http = require('http');
 
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;
 
   const { method } = request;
 
-  if (method === "GET") {
-    response.end("<h1>Hello!</h1>");
+  if (method === 'GET') {
+    response.end('<h1>Hello!</h1>');
   }
 
-  if (method === "POST") {
-    response.end("<h1>Hai!</h1>");
+  if (method === 'POST') {
+    response.end('<h1>Hai!</h1>');
   }
 
-  if (method === "PUT") {
-    response.end("<h1>Bonjour!</h1>");
+  if (method === 'PUT') {
+    response.end('<h1>Bonjour!</h1>');
   }
 
-  if (method === "DELETE") {
-    response.end("<h1>Salam!</h1>");
+  if (method === 'DELETE') {
+    response.end('<h1>Salam!</h1>');
   }
 };
 
 const server = http.createServer(requestListener);
 
 const port = 5000;
-const host = "localhost";
+const host = 'localhost';
 
 server.listen(port, host, () => {
   console.log(`Server berjalan pada http://${host}:${port}`);
@@ -179,8 +175,6 @@ curl -X DELETE http://localhost:5000
 # output: <h1>Salam!</h1>
 ```
 
----
-
 # Body Request
 
 `http.clientRequest` adalah turunan dari readbale stream, yang mana untuk mendapat data body akan sedikit sulit dibanding data header. Di teknik stream kita mendapat data dari `EventEmitter` sedangkan di `http.clientRequest` evnt `data` dan `end` yang digunakan untuk mendapat data body.
@@ -189,11 +183,11 @@ curl -X DELETE http://localhost:5000
 const requestListener = (request, response) => {
   let body = [];
 
-  request.on("data", (chunk) => {
+  request.on('data', (chunk) => {
     body.push(chunk);
   });
 
-  request.on("end", () => {
+  request.on('end', () => {
     body = Buffer.concat(body).toString();
   });
 };
@@ -218,14 +212,14 @@ Buatlah web server yang merespon method `POST` ketika client mengirimkan nama "D
 Buka file server.js dan hapus method `PUT` dan `DELETE` agar lebih fokus ke POST. lalu tambahkan kode berikut:
 
 ```javascript
-if (method === "POST") {
+if (method === 'POST') {
   let body = [];
 
-  request.on("data", (chunk) => {
+  request.on('data', (chunk) => {
     body.push(chunk);
   });
 
-  request.on("end", () => {
+  request.on('end', () => {
     body = Buffer.concat(body).toString();
     response.end(`<h1>Hai, ${body}!</h1>`);
   });
@@ -242,14 +236,14 @@ curl -X POST -H "Content-Type: application/json" http://localhost:5000 -d "{\"na
 Outputnya tidak sesuai dengan apa yang kita inginkan jadi kita perlu mengubahnya dengan `JSON.parse(body)`.
 
 ```javascript
-if (method === "POST") {
+if (method === 'POST') {
   let body = [];
 
-  request.on("data", (chunk) => {
+  request.on('data', (chunk) => {
     body.push(chunk);
   });
 
-  request.on("end", () => {
+  request.on('end', () => {
     body = Buffer.concat(body).toString();
     const { name } = JSON.parse(body);
     response.end(`<h1>Hai, ${name}!</h1>`);
@@ -262,8 +256,6 @@ Coba request lagi dengan cURL dan hasilnya akan sesuai:
 ```html
 <h1>Hai, Dicoding!</h1>
 ```
-
----
 
 # Routing Request
 
@@ -281,11 +273,11 @@ Properti akan return berupa path contohnya `http://localhost:5000/about/`, maka 
 const requestListener = (request, response) => {
   const { url } = request;
 
-  if (url === "/") {
+  if (url === '/') {
     // curl http://localhost:5000/
   }
 
-  if (url === "/about") {
+  if (url === '/about') {
     // curl http://localhost:5000/about
   }
 
@@ -296,8 +288,8 @@ const requestListener = (request, response) => {
 Kita juga bisa mengombinasikan dengan method request.
 
 ```javascript
-if (url === "/") {
-  if (method === "GET") {
+if (url === '/') {
+  if (method === 'GET') {
     // curl -X GET http://localhost:5000/
   }
 
@@ -329,10 +321,10 @@ Buatlah web server dengan ketentuan berikut
 Gunakan source code dari latihan sebelumnya dan jadikan komentar kode yang tidak diperlukan, lalu tambahkan properti url di dalam requestListener.:
 
 ```javascript
-const http = require("http");
+const http = require('http');
 
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;
 
   const { method, url } = request; // tambahkan properti url
@@ -361,14 +353,14 @@ Sekarang kita sudah dapat nilai `url` dari `request`. Dan sekarang tambhakan log
 
 ```javascript
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;
 
   const { method, url } = request;
 
-  if (url === "/") {
+  if (url === '/') {
     // TODO 2: logika respons bila url bernilai '/'
-  } else if (url === "/about") {
+  } else if (url === '/about') {
     // TODO 3: logika respons bila url bernilai '/about'
   } else {
     // TODO 1: logika respons bila url bukan '/' atau '/about'
@@ -382,17 +374,17 @@ Kita akan kerjakan sesuai urutan todo, pertama kita akan menangani url selain `/
 
 ```javascript
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;
 
   const { method, url } = request;
 
-  if (url === "/") {
+  if (url === '/') {
     // TODO 2: logika respons bila url bernilai '/'
-  } else if (url === "/about") {
+  } else if (url === '/about') {
     // TODO 3: logika respons bila url bernilai '/about'
   } else {
-    response.end("<h1>Halaman tidak ditemukan!</h1>");
+    response.end('<h1>Halaman tidak ditemukan!</h1>');
   }
 
   /** Kode komentar disembunyikan agar lebih ringkas */
@@ -413,8 +405,8 @@ curl -X GET http://localhost:5000/test
 Satu todo sudah selesai, sekarang kita akan menangani url `/` dan `/about`. URL `/` hanya bisa diakses dengan method `GET` selain itu akan merespon "Halaman tidak dapat diakses dengan `<any>` request", `<any>` adalah method selain `GET`:
 
 ```javascript
-if (url === "/") {
-  if (method === "GET") {
+if (url === '/') {
+  if (method === 'GET') {
     // response bila client menggunakan GET
   } else {
     // response bila client tidak menggunakan GET
@@ -425,9 +417,9 @@ if (url === "/") {
 Dan berikan respons sesuai dengan ketentuan:
 
 ```javascript
-if (url === "/") {
-  if (method === "GET") {
-    response.end("<h1>Ini adalah homepage</h1>");
+if (url === '/') {
+  if (method === 'GET') {
+    response.end('<h1>Ini adalah homepage</h1>');
   } else {
     response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
   }
@@ -513,31 +505,31 @@ curl -X DELETE http://localhost:5000/about
 Full source code:
 
 ```javascript
-const http = require("http");
+const http = require('http');
 
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
   response.statusCode = 200;
 
   const { method, url } = request;
 
-  if (url === "/") {
-    if (method === "GET") {
-      response.end("<h1>Ini adalah homepage</h1>");
+  if (url === '/') {
+    if (method === 'GET') {
+      response.end('<h1>Ini adalah homepage</h1>');
     } else {
       response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
     }
-  } else if (url === "/about") {
-    if (method === "GET") {
-      response.end("<h1>Halo! Ini adalah halaman about</h1>");
-    } else if (method === "POST") {
+  } else if (url === '/about') {
+    if (method === 'GET') {
+      response.end('<h1>Halo! Ini adalah halaman about</h1>');
+    } else if (method === 'POST') {
       let body = [];
 
-      request.on("data", (chunk) => {
+      request.on('data', (chunk) => {
         body.push(chunk);
       });
 
-      request.on("end", () => {
+      request.on('end', () => {
         body = Buffer.concat(body).toString();
         const { name } = JSON.parse(body);
         response.end(`<h1>Halo, ${name}! Ini adalah halaman about</h1>`);
@@ -546,21 +538,19 @@ const requestListener = (request, response) => {
       response.end(`<h1>Halaman tidak dapat diakses menggunakan ${method} request</h1>`);
     }
   } else {
-    response.end("<h1>Halaman tidak ditemukan!</h1>");
+    response.end('<h1>Halaman tidak ditemukan!</h1>');
   }
 };
 
 const server = http.createServer(requestListener);
 
 const port = 5000;
-const host = "localhost";
+const host = 'localhost';
 
 server.listen(port, host, () => {
   console.log(`Server berjalan pada http://${host}:${port}`);
 });
 ```
-
----
 
 # Response Status Code
 
@@ -590,7 +580,7 @@ const requestListener = (request, response) => {
   response.statusCode = 404;
 
   // 404 defaultnya adalah 'not found'
-  response.statusMessage = "User is not found";
+  response.statusMessage = 'User is not found';
 };
 ```
 
@@ -622,30 +612,30 @@ Kita akan sesuaikan status code satu per satu sebelum sintkas `response.end()`. 
 
 ```javascript
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
+  response.setHeader('Content-Type', 'text/html');
 
   const { method, url } = request;
 
-  if (url === "/") {
-    if (method === "GET") {
+  if (url === '/') {
+    if (method === 'GET') {
       response.statusCode = 200;
-      response.end("<h1>Ini adalah homepage</h1>");
+      response.end('<h1>Ini adalah homepage</h1>');
     } else {
       response.statusCode = 400;
       response.end(`<h1>Halaman tidak dapat diakses dengan ${method} request</h1>`);
     }
-  } else if (url === "/about") {
-    if (method === "GET") {
+  } else if (url === '/about') {
+    if (method === 'GET') {
       response.statusCode = 200;
-      response.end("<h1>Halo! Ini adalah halaman about</h1>");
-    } else if (method === "POST") {
+      response.end('<h1>Halo! Ini adalah halaman about</h1>');
+    } else if (method === 'POST') {
       let body = [];
 
-      request.on("data", (chunk) => {
+      request.on('data', (chunk) => {
         body.push(chunk);
       });
 
-      request.on("end", () => {
+      request.on('end', () => {
         body = Buffer.concat(body).toString();
         const { name } = JSON.parse(body);
         response.statusCode = 200;
@@ -657,7 +647,7 @@ const requestListener = (request, response) => {
     }
   } else {
     response.statusCode = 404;
-    response.end("<h1>Halaman tidak ditemukan!</h1>");
+    response.end('<h1>Halaman tidak ditemukan!</h1>');
   }
 };
 ```
@@ -675,8 +665,6 @@ curl -X DELETE http://localhost:5000/ -i
 Dan sekarang server akan memberikan status yang sesuai:
 ![alt text](image-1.png)
 
----
-
 # Response Header
 
 Server bisa merespons dengan memberikan data dalam tipe (MIME types) lain, seperti XML, JSON, gambar, atau sekadar teks biasa. Apa pun MIME types yang digunakan, web server wajib memberi tahu pada client. Caranya yaitu dengan menggunakan `response.setHeader()`.
@@ -687,8 +675,8 @@ Data di header bisa ditetapkan sebanyak mugnkin dan method `setHeader()` menerim
 
 ```javascript
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "text/html");
-  response.setHeader("Powered-By", "Node.js");
+  response.setHeader('Content-Type', 'text/html');
+  response.setHeader('Powered-By', 'Node.js');
 };
 // Penulisan properti header ditulis dengan Proper Case atau tiap awal kata diawali dengan huruf besar. dan dipisah dengan tanda strip (-).
 ```
@@ -700,8 +688,8 @@ Di latihan ini kita akna mengubah format HTML menjadi JSON dan menambahkan prope
 Sekarang buka file `server.js` dan ubah bagian `response.setHeader` menjadi application/json. Dan tambahkan `Powered-By` dengan nilai `Node.js`.:
 
 ```javascript
-response.setHeader("Content-Type", "application/json");
-response.setHeader("Powered-By", "Node.js");
+response.setHeader('Content-Type', 'application/json');
+response.setHeader('Powered-By', 'Node.js');
 ```
 
 Simpan dan jalankan, dan seharusnya hasilnya akan seperti ini:
@@ -715,18 +703,18 @@ Object `response` yang ada di parameter fungsi request listener adalah instance 
 
 ```javascript
 const requestListener = (request, response) => {
-  response.write("<html>");
-  response.write("<body>");
-  response.write("<h1>Hello, World!</h1>");
-  response.write("</body>");
-  response.write("</html>");
+  response.write('<html>');
+  response.write('<body>');
+  response.write('<h1>Hello, World!</h1>');
+  response.write('</body>');
+  response.write('</html>');
   response.end(); // end bisa digunakan untuk menulisa data terakhir sebelum proses penulisan diakhiri.
 };
 
 //Jadi, untuk kasus diatas datapat dipersingkat penulisannnya menjadi seperti ini
 
 const requestListener = (request, response) => {
-  response.end("<html><body><h1>Hello, World!</h1></body></html>");
+  response.end('<html><body><h1>Hello, World!</h1></body></html>');
 };
 ```
 
@@ -745,11 +733,11 @@ Ketentuannya, setiap JSON yang akan kita kirimkan harus punya `message`. Value n
 Sekarang buka file `server.js` dan ubah bagian `response.end()` menjadi JSON seperti ini:
 
 ```javascript
-response.end("<h1>Halaman tidak ditemukan!</h1>"); // sebelum
+response.end('<h1>Halaman tidak ditemukan!</h1>'); // sebelum
 
 response.end(
   JSON.stringify({
-    message: "Halaman tidak ditemukan!",
+    message: 'Halaman tidak ditemukan!',
   })
 ); // sesudah
 ```
@@ -769,17 +757,17 @@ Dan sekarang kita akan mengubah semua bagiannya menjadi JSON.:
 
 ```javascript
 const requestListener = (request, response) => {
-  response.setHeader("Content-Type", "application/json");
-  response.setHeader("Powered-By", "Node.js");
+  response.setHeader('Content-Type', 'application/json');
+  response.setHeader('Powered-By', 'Node.js');
 
   const { method, url } = request;
 
-  if (url === "/") {
-    if (method === "GET") {
+  if (url === '/') {
+    if (method === 'GET') {
       response.statusCode = 200;
       response.end(
         JSON.stringify({
-          message: "Ini adalah homepage",
+          message: 'Ini adalah homepage',
         })
       );
     } else {
@@ -790,22 +778,22 @@ const requestListener = (request, response) => {
         })
       );
     }
-  } else if (url === "/about") {
-    if (method === "GET") {
+  } else if (url === '/about') {
+    if (method === 'GET') {
       response.statusCode = 200;
       response.end(
         JSON.stringify({
-          message: "Halo! Ini adalah halaman about",
+          message: 'Halo! Ini adalah halaman about',
         })
       );
-    } else if (method === "POST") {
+    } else if (method === 'POST') {
       let body = [];
 
-      request.on("data", (chunk) => {
+      request.on('data', (chunk) => {
         body.push(chunk);
       });
 
-      request.on("end", () => {
+      request.on('end', () => {
         body = Buffer.concat(body).toString();
         const { name } = JSON.parse(body);
         response.statusCode = 200;
@@ -827,7 +815,7 @@ const requestListener = (request, response) => {
     response.statusCode = 404;
     response.end(
       JSON.stringify({
-        message: "Halaman tidak ditemukan!",
+        message: 'Halaman tidak ditemukan!',
       })
     );
   }
@@ -845,8 +833,6 @@ curl -X DELETE http://localhost:5000/
 # output: {"message":"Halaman tidak dapat diakses dengan DELETE request"}
 ```
 
----
-
 # Node.js Web Framework
 
 ## Apa itu Web Framework?
@@ -854,8 +840,6 @@ curl -X DELETE http://localhost:5000/
 Web Framework adalah sebuah kerangka yang dapat membantu mempermudah pengembangan web termasuk dalam membuat web server.
 
 Web Framework menyediakan sekumpulan tools dan library yang dapat menyederhanakan hal-hal yang sering dilakukan dalam pengembangan web, seperti pembuatan server, routing, menangani permintaan, interaksi dengan database, otorisasi, hingga meningkatkan ketahanan web dari serangan luar.
-
----
 
 # Web Framework di Node.js
 
@@ -889,30 +873,28 @@ Dan atur NPM runner di package.json
 Lalu, buat file server.js dengan isi:
 
 ```javascript
-console.log("Halo, kita akan belajar membuat server menggunakan Hapi");
+console.log('Halo, kita akan belajar membuat server menggunakan Hapi');
 ```
 
 Simpan dan jalankan server.js dengan perintah `npm run start`. Jika berhasil, maka akan muncul tulisan “Halo, kita akan belajar membuat server menggunakan Hapi”.
-
----
 
 # Membuat HTTP Server
 
 Untuk membuat HTTP server Hapi kita tidak menggunakan core module `http` tapi menggunakan modul pihak ketiga `@hapi/hapi`. Install modul tersebut dengan perintah `npm install @hapi/hapi`.
 
 ```javascript
-const Hapi = require("@hapi/hapi"); // import modul hapi
+const Hapi = require('@hapi/hapi'); // import modul hapi
 ```
 
 Kemudian buat struktur kode untuk HTTP server di Hapi:
 
 ```javascript
-const Hapi = require("@hapi/hapi");
+const Hapi = require('@hapi/hapi');
 
 const init = async () => {
   const server = Hapi.server({
     port: 5000,
-    host: "localhost",
+    host: 'localhost',
   });
 
   await server.start();
@@ -939,12 +921,12 @@ Proses nya dijalankan dengan `server.start()` dan dilakukan secara asynchronous.
 2. Buka file `server.js` dan tulis kode berikut:
 
 ```javascript
-const Hapi = require("@hapi/hapi");
+const Hapi = require('@hapi/hapi');
 
 const init = async () => {
   const server = Hapi.server({
     port: 5000,
-    host: "localhost",
+    host: 'localhost',
   });
 
   await server.start();
@@ -962,8 +944,6 @@ Hasil yang diharapkan:
 
 Hapi secara default merespon "Not found" ketika tidak ada request handler yang cocok dengan request yang masuk. Hal ini lebih baik daipada permintaan yang tidak terjawab sama sekali.
 
----
-
 # Method/Verb Request dan Routing
 
 Sekrang kita akan menambahkan routing agar server bisa merespons permintaan sesuai method dan url.
@@ -974,14 +954,14 @@ Routing di Hapi tidak seperti sebelumnya. Namun, menggunakan [route configuratio
 const init = async () => {
   const server = Hapi.server({
     port: 5000,
-    host: "localhost",
+    host: 'localhost',
   });
 
   server.route({
-    method: "GET",
-    path: "/",
+    method: 'GET',
+    path: '/',
     handler: (request, h) => {
-      return "Hello World!";
+      return 'Hello World!';
     },
   });
 
@@ -998,22 +978,22 @@ Lalu, cara menetapkan lebih dari satu config dengan emnggunakan array di dalam `
 const init = async () => {
   const server = Hapi.server({
     port: 5000,
-    host: "localhost",
+    host: 'localhost',
   });
 
   server.route([
     {
-      method: "GET",
-      path: "/",
+      method: 'GET',
+      path: '/',
       handler: (request, h) => {
-        return "Hello World!";
+        return 'Hello World!';
       },
     },
     {
-      method: "GET",
-      path: "/about",
+      method: 'GET',
+      path: '/about',
       handler: (request, h) => {
-        return "About page";
+        return 'About page';
       },
     },
   ]);
@@ -1028,17 +1008,17 @@ Sebaiknya kita memisahkan handler dari route configuration. Kita bisa membuat ha
 ```javascript route.js
 const routes = [
   {
-    method: "GET",
-    path: "/",
+    method: 'GET',
+    path: '/',
     handler: (request, h) => {
-      return "Homepage";
+      return 'Homepage';
     },
   },
   {
-    method: "GET",
-    path: "/about",
+    method: 'GET',
+    path: '/about',
     handler: (request, h) => {
-      return "About page";
+      return 'About page';
     },
   },
 ];
@@ -1047,13 +1027,13 @@ module.exports = routes;
 ```
 
 ```javascript server.js
-const Hapi = require("@hapi/hapi");
-const routes = require("./routes");
+const Hapi = require('@hapi/hapi');
+const routes = require('./routes');
 
 const init = async () => {
   const server = Hapi.server({
     port: 5000,
-    host: "localhost",
+    host: 'localhost',
   });
 
   server.route(routes);
@@ -1088,38 +1068,38 @@ Buat file JavaScript baru dengan nama `routes.js` dan isi dengan kode berikut:
 ```javascript
 const routes = [
   {
-    method: "GET",
-    path: "/",
+    method: 'GET',
+    path: '/',
     handler: (request, h) => {
-      return "Homepage";
+      return 'Homepage';
     },
   },
   {
-    method: "*",
-    path: "/",
+    method: '*',
+    path: '/',
     handler: (request, h) => {
-      return "Halaman tidak dapat diakses dengan method tersebut";
+      return 'Halaman tidak dapat diakses dengan method tersebut';
     },
   },
   {
-    method: "GET",
-    path: "/about",
+    method: 'GET',
+    path: '/about',
     handler: (request, h) => {
-      return "About page";
+      return 'About page';
     },
   },
   {
-    method: "*",
-    path: "/about",
+    method: '*',
+    path: '/about',
     handler: (request, h) => {
-      return "Halaman tidak dapat diakses dengan method";
+      return 'Halaman tidak dapat diakses dengan method';
     },
   },
   {
-    method: "*",
-    path: "/{any*}",
+    method: '*',
+    path: '/{any*}',
     handler: (request, h) => {
-      return "Halaman tidak ditemukan";
+      return 'Halaman tidak ditemukan';
     },
   },
 ];
@@ -1134,17 +1114,17 @@ Kemudian nilai `/{any*}` di route paling akhir yang berfungsi untuk menangani re
 ```javascript
 const routes = [
   {
-    method: "*",
-    path: "/",
+    method: '*',
+    path: '/',
     handler: (request, h) => {
-      return "Halaman tidak dapat diakses dengan method tersebut";
+      return 'Halaman tidak dapat diakses dengan method tersebut';
     },
   },
   {
-    method: "GET",
-    path: "/",
+    method: 'GET',
+    path: '/',
     handler: (request, h) => {
-      return "Homepage";
+      return 'Homepage';
     },
   },
 ];
@@ -1155,13 +1135,13 @@ Dan hasilnya jika kita request ke `http://localhost:5000/` dengan method `GET` m
 Setelah routes config, kita akan mengintegrasikan routes ke dalam server.js:
 
 ```javascript
-const Hapi = require("@hapi/hapi");
-const routes = require("./routes"); // import routes
+const Hapi = require('@hapi/hapi');
+const routes = require('./routes'); // import routes
 
 const init = async () => {
   const server = Hapi.server({
     port: 5000,
-    host: "localhost",
+    host: 'localhost',
   });
 
   server.route(routes); // mengintegrasikan routes
@@ -1186,8 +1166,6 @@ curl -X POST http://localhost:5000
 # output: Halaman tidak dapat diakses dengan method tersebut
 ```
 
----
-
 # Path Parameter
 
 URL [https://github.com/dicodingacademy](https://github.com/dicodingacademy) kita tahu bahwa `dicodingacademy` adalah path parameter. Begitu juga dengan [https://twitter.com/maudyayunda](https://twitter.com/maudyayunda) yang mana `maudyayunda` adalah path parameter.
@@ -1196,8 +1174,8 @@ Untuk melakukan ini kita menggunakan teknik Path Paramater ini kita menggunakan 
 
 ```javascript
 server.route({
-  method: "GET",
-  path: "/users/{username}",
+  method: 'GET',
+  path: '/users/{username}',
   handler: (request, h) => {
     const { username } = request.params;
     return `Hello, ${username}!`;
@@ -1211,10 +1189,10 @@ Jika parameter tidak ada atau `/user` saja maka akan mengalami error. Agar tidak
 
 ```javascript
 server.route({
-  method: "GET",
-  path: "/users/{username?}",
+  method: 'GET',
+  path: '/users/{username?}',
   handler: (request, h) => {
-    const { username = "stranger" } = request.params;
+    const { username = 'stranger' } = request.params;
     return `Hello, ${username}!`;
   },
 });
@@ -1231,46 +1209,46 @@ Tambahkan handler untuk path parameter
 ```javascript
 const routes = [
   {
-    method: "GET",
-    path: "/",
+    method: 'GET',
+    path: '/',
     handler: (request, h) => {
-      return "Homepage";
+      return 'Homepage';
     },
   },
   {
-    method: "*",
-    path: "/",
+    method: '*',
+    path: '/',
     handler: (request, h) => {
-      return "Halaman tidak dapat diakses dengan method tersebut";
+      return 'Halaman tidak dapat diakses dengan method tersebut';
     },
   },
   {
-    method: "GET",
-    path: "/about",
+    method: 'GET',
+    path: '/about',
     handler: (request, h) => {
-      return "About page";
+      return 'About page';
     },
   },
   {
-    method: "*",
-    path: "/about",
+    method: '*',
+    path: '/about',
     handler: (request, h) => {
-      return "Halaman tidak dapat diakses dengan method";
+      return 'Halaman tidak dapat diakses dengan method';
     },
   },
   {
-    method: "GET",
-    path: "/hello/{name?}",
+    method: 'GET',
+    path: '/hello/{name?}',
     handler: (request, h) => {
-      const { name = "stranger" } = request.params;
+      const { name = 'stranger' } = request.params;
       return `Hello, ${name}!`;
     },
   },
   {
-    method: "*",
-    path: "/{any*}",
+    method: '*',
+    path: '/{any*}',
     handler: (request, h) => {
-      return "Halaman tidak ditemukan";
+      return 'Halaman tidak ditemukan';
     },
   },
 ];
@@ -1287,8 +1265,6 @@ curl -X GET http://localhost:5000/hello
 # output: Hello, stranger!
 ```
 
----
-
 # Query Parameters
 
 Query Parameter biasanya digunakan untuk permintaan yang membutuhkan kueri dari client, contohnya seperti pencarian dan filter data. Data yang dikirim melalui quer punya format **key=value**
@@ -1301,8 +1277,8 @@ Contoh di atas kita punya dua query param yang pertama `name=harry` dan `locatio
 
 ```javascript
 server.route({
-  method: "GET",
-  path: "/",
+  method: 'GET',
+  path: '/',
   handler: (request, h) => {
     const { name, location } = request.query;
     return `Hello, ${name} from ${location}`;
@@ -1356,8 +1332,6 @@ curl -X GET http://localhost:5000/hello/dicoding
 # output: Hello, dicoding!
 ```
 
----
-
 # Body/Payload Request
 
 Jika menggunakan Node.js untuk mendapatkan data pada body request meskipun datanya hanya sebatas teks kita harus berurusan dengan ReadableStream. Namun, dengan Hapi kita bisa mendapatkan data body request dengan mudah.
@@ -1368,8 +1342,8 @@ Kapan pun client mengirim paylod JSON kita bisa akses di route handler dengan `r
 
 ```javascript
 server.route({
-  method: "POST",
-  path: "/login",
+  method: 'POST',
+  path: '/login',
   handler: (request, h) => {
     const { username, password } = request.payload;
     return `Welcome ${username}!`;
@@ -1389,8 +1363,6 @@ Request ke /login dengan curl method post:
 curl -X POST http://localhost:5000/login -H "Content-Type: application/json" -d "{\"username\": \"harrypotter\", \"password\": \"encryptedpassword\"}"
 ```
 
----
-
 # Response Toolkit
 
 Handler Hapi punya dua parameters yaitu `request` dan `h`
@@ -1402,8 +1374,8 @@ Kita bisa membuat response dengan sangat sederhana ketika ada request:
 
 ```javascript
 server.route({
-  method: "GET",
-  path: "/",
+  method: 'GET',
+  path: '/',
   handler: (request, h) => {
     return `Homepage`;
   },
@@ -1414,10 +1386,10 @@ Dengan cara tersebut status response selalu bernilai 200 OK. Ketika Anda butuh m
 
 ```javascript
 server.route({
-  method: "POST",
-  path: "/user",
+  method: 'POST',
+  path: '/user',
   handler: (request, h) => {
-    return h.response("created").code(201);
+    return h.response('created').code(201);
   },
 });
 ```
@@ -1526,7 +1498,7 @@ Selain itu akan ada berkas `.eslintrc.json` yang berisi konfigurasi ESLint. Berk
 4. Setelah itu tambahkan config di `.eslintrc.json`:
 
 ```javascript
-import daStyle from "eslint-config-dicodingacademy";
+import daStyle from 'eslint-config-dicodingacademy';
 
 export default [
   daStyle,
@@ -1549,13 +1521,9 @@ export default [
    ![alt text](image-6.png)
    Penggunaan tanda petik dua dianggap sebuah error karena tidak sesuai dengan style guide yang digunakan, dimana style guide tersebut menggunakan tanda petik satu.
 
----
-
 # Hasil Project
 
 Hasil project bisa dilihat di [notes-app-back-end](notes-app-back-end) dan juga [nodejs-consume-data](nodejs-consume-data)
-
----
 
 # Same-Origin Policy
 
@@ -1578,8 +1546,6 @@ Bagaimana cara satu layanan menemukan dan berkomunikasi dengan layanan lainnya?
 Supaya layanan bisa saling berkomunikasi, kita harus menemukan IP address, DNS, atau Port yang ada di server terlebih dahulu. Setelah itu, barulah ia dapat berkomunikasi antar layanan menggunakan protokol HTTP, RPC, dan AMQP.
 
 Node.js memiliki kemampuan untuk mengonsumsi dan menggabungkan data dengan melakukan permintaan HTTP. Anda bisa mengonsumsi data dari suatu layanan REST API dan kemudian menggabungkan data tersebut sebelum dikembalikan sebagai response.
-
----
 
 Video Web Service menggunakan Node.js
 Untuk memperdalam dan mempermudah pemahaman pada materi ini, Anda dapat menyimak video pembahasan berikut.

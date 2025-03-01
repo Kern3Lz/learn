@@ -29,8 +29,6 @@
 }
 ```
 
----
-
 # Latihan: Mendapatkan Seluruh Catatan yang Disimpan
 
 - Buka request dengan tab baru
@@ -62,8 +60,6 @@ Hasil:
   }
 }
 ```
-
----
 
 # Latihan: Mendapatkan Catatan Secara Spesifik
 
@@ -102,8 +98,6 @@ Ketika id tidak ada atau url salah `http://localhost:5000/notes/123`
 }
 ```
 
----
-
 # Latihan: Mengubah Catatan di Postman
 
 - Buka request dengan tab baru
@@ -137,8 +131,6 @@ Hasil:
 
 ![alt text](./img/image.png)
 
----
-
 # Latihan: Menghapus Catatan di Postman
 
 - Buka request dengan tab baru
@@ -164,8 +156,6 @@ Jika id tidak ada atau url salah `http://localhost:5000/notes/123`
 }
 ```
 
----
-
 # Automate Testing Using Postman
 
 Postman Anda juga bisa melakukan pengujian secara otomatis, sehingga tak perlu lagi melihat respons dari server secara manual untuk memastikan responnya sesuai dengan harapan. Pengujian otomatis di Postman menggunakan kode JavaScript, serupa dengan unit dan integration testing yang sudah Anda pelajari di kelas [Belajar Dasar Pemrograman JavaScript](https://www.dicoding.com/academies/256).
@@ -174,8 +164,6 @@ Testing ini bisa menguji status code, properti header, hingga body respons. Peng
 
 Tapi, terlebih dahulu belajar collection dan environment di Postman.
 
----
-
 # Postman Collection
 
 Collection adalah storage untuk kumpulan request. Request yang kita kirim akan tersimpan di history sidebar. Anggap collection adalah folder.
@@ -183,8 +171,6 @@ Collection adalah storage untuk kumpulan request. Request yang kita kirim akan t
 Dengan collection kita bisa menjalankan seluruh request didalamnya secara bersamaan. Collection juga bisa diexport dan diimport.
 
 ![alt text](./img/image1.png)
-
----
 
 # Postman Environment
 
@@ -204,8 +190,6 @@ Notasi diatas bisa untuk mencoba di URL, parameter, header, body, dan lainnya.
 
 Contoh:
 `localhost:5000/notes/{{notesId}}`
-
----
 
 # Skenario Pengujian Otomatis
 
@@ -246,7 +230,5 @@ Contoh:
 - - Pastikan body response memiliki properti dan nilai yang sesuai.
     Ketika mengakses catatan yang dihapus
 - - Pastikan catatan yang dihapus tidak ditemukan.
-
----
 
 # Latihan: Menambahkan Skenario Adding Notes

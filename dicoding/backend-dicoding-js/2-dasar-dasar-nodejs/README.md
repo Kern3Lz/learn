@@ -13,8 +13,6 @@ Langkah-langkah untuk emmbuat proyek Node.js
 4. Setelah menuliskan perintah di atas, Anda akan diberikan beberapa pertanyaan untuk mengisi nilai package name, version, description. Nilai yang berada di dalam tanda kurung merupakan nilai default. Anda dapat menggunakan nilainya dengan langsung menekan tombol Enter. **Untuk saat ini, cukup berikan semua pertanyaan dengan nilai default.**
 5. Setelah selesai, Anda akan mendapatkan file [`package.json`](nodejs-basic/package.json) yang berisi informasi proyek Node.js yang sudah dibuat.
 
----
-
 # Latihan: Menjalankan Javascript Menggunakan Node.js
 
 Ada dua cara untuk menjalankan kode JavaScript menggunakan Node.js. Yang pertama dengan NodeREPL dan yang kedua dengan mengeksekusi file JavaScript.
@@ -70,7 +68,7 @@ const message = (name) => {
   console.log(`Hello ${name}`);
 };
 
-message("JavaScript"); // CTRL + D dibagian ini
+message('JavaScript'); // CTRL + D dibagian ini
 // Output: Hello JavaScript
 ```
 
@@ -81,8 +79,6 @@ node index.js
 ```
 
 Maka akan muncul output `Hello JavaScript`.
-
----
 
 # Node.js Global Project
 
@@ -106,8 +102,6 @@ Ada juga objek yang disebut 'pseudo-globals' yang merupakan objek yang sebenarny
 - `__dirname`: Direktori dari file yang sedang dieksekusi.
 - `require`: Digunakan untuk mengimpor modul.
 
----
-
 # Process Object
 
 Pada Node.js, global objek process memiliki fungsi dan properti yang dapat memberikan informasi mengenai proses yang sedang berjalan.
@@ -117,13 +111,13 @@ Yang sering digunakan salah satunya adalah `process.env`. Properti ini berisi in
 Kita juga bisa menyimpan nilai di dalam `process.env` biasanya berguna untuk menentukan alur code seperti if-else di program berdasarkan environment yang sedang berjalan. Contohnya, ketika Anda ingin mengatur environment development dan production.
 
 ```javascript
-const http = require("http");
-const hostname = process.env.NODE_ENV !== "production" ? "localhost" : "dicoding.com";
+const http = require('http');
+const hostname = process.env.NODE_ENV !== 'production' ? 'localhost' : 'dicoding.com';
 const port = 3000;
 const requestHandler = (req, res) => {
   res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  res.end("Hello, World!\n");
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello, World!\n');
 };
 const server = http.createServer(requestHandler);
 server.listen(port, hostname, () => {
@@ -223,8 +217,6 @@ console.log(`Mode environment: ${environment}`);
 console.log(`Penggunaan memori dari ${initialMemoryUsage} naik ke ${currentMemoryUsage}`);
 ```
 
----
-
 # Modularization
 
 Jika kode dituliskan dalam satu berkas saja, maka akan sangat sulit untuk membaca serta memelihara kode tersebut. **Idealnya, satu berkas JavaScript hanya memiliki satu tanggung jawab saja.**
@@ -235,7 +227,7 @@ Untuk mengekspornya, simpanlah nilai tersebut pada properti `module.exports`. Co
 
 ```javascript Coffee.js
 const coffee = {
-  name: "Tubruk",
+  name: 'Tubruk',
   price: 15000,
 };
 
@@ -245,7 +237,7 @@ module.exports = coffee;
 Setelah itu nilai `coffee`dapat digunakan pada berkas JavaScript lain dengan cara mengimpor nilainya melalui fungsi global `require()`. Contoh:
 
 ```javascript App.js
-const coffee = require("./coffee");
+const coffee = require('./coffee');
 
 console.log(coffee);
 
@@ -270,20 +262,20 @@ Bila berkas coffee.js diletakkan di folder yang berbeda dengan app.js, contohnya
 Maka kita perlu mengimpornya dengan alamat yang sesuai:
 
 ```javascript App.js
-const coffee = require("./lib/coffee");
+const coffee = require('./lib/coffee');
 ```
 
 Kita juga bisa menggunakan `../` untuk mengakses folder di atasnya atau kelar dari satu level folder.
 
 ```javascript App.js
-const coffee = require("../lib/coffee");
+const coffee = require('../lib/coffee');
 ```
 
 Dalam impor dan ekspor nilai kita bisa menggunakan object literal dan object destructuring untuk mengimpor lebih dari satu nilai. Contohnya seperti ini:
 
 ```javascript user.js
-const firstName = "Harry";
-const lastName = "Potter";
+const firstName = 'Harry';
+const lastName = 'Potter';
 
 /* gunakan object literal
 untuk mengekspor lebih dari satu nilai. */
@@ -294,7 +286,7 @@ module.exports = { firstName, lastName };
 /**
  * Gunakan object destructuring untuk mengimpor lebih dari satu nilai pada modul.
  */
-const { firstName, lastName } = require("./user");
+const { firstName, lastName } = require('./user');
 
 console.log(firstName);
 console.log(lastName);
@@ -327,7 +319,7 @@ class Tiger {
   }
 
   growl() {
-    console.log("grrrrr!");
+    console.log('grrrrr!');
   }
 }
 
@@ -387,8 +379,6 @@ node ./modularization/index.js
 Dan outpunya akan seperti ini:
 ![alt text](image-2.png)
 
----
-
 # Node Package Manager (NPM)
 
 NPM bisa memasang atau menghapus third party modul. Modul yang dipasang ada di node_modules.
@@ -404,9 +394,9 @@ npm install moment
 Dan kita bisa module moment di project kita dengan
 
 ```javascript
-const moment = require("moment");
+const moment = require('moment');
 
-const date = moment().format("MMM Do YY");
+const date = moment().format('MMM Do YY');
 console.log(date);
 
 /**
@@ -450,14 +440,12 @@ node ./node-package-manager/index.js
 Dan outputnya akan seperti ini:
 ![alt text](image-3.png)
 
----
-
 # Events
 
 Node.js biasanya punya pola event-driven atau alur berdasarkan suatu kejadian. Node.js menggunakan EventEmitter untuk mengimplementasikan pola ini.
 
 ```javascript
-const EventEmitter = require("events");
+const EventEmitter = require('events');
 
 const myEventEmitter = new EventEmitter();
 ```
@@ -485,7 +473,7 @@ Fungsi on menerima dua argumen yang pertama nama event nya dan kedua adalah fung
 Untuk memanggil event gunakan fungsi `emit()`.
 
 ```javascript
-const { EventEmitter } = require("events");
+const { EventEmitter } = require('events');
 
 const myEventEmitter = new EventEmitter();
 
@@ -493,10 +481,10 @@ const makeCoffee = ({ name }) => {
   console.log(`Kopi ${name} telah dibuat!`);
 };
 
-myEventEmitter.on("coffee-order", makeCoffee);
+myEventEmitter.on('coffee-order', makeCoffee);
 
 // Memicu event 'coffee-order' terjadi.
-myEventEmitter.emit("coffee-order", { name: "Tubruk" });
+myEventEmitter.emit('coffee-order', { name: 'Tubruk' });
 ```
 
 Emit() bisa menerima argumen kedua, ketiga, dan seterusnya yang akan diteruskan ke listener. Yang dimana argumen pertama adalah nama event.
@@ -504,7 +492,7 @@ Emit() bisa menerima argumen kedua, ketiga, dan seterusnya yang akan diteruskan 
 Listener juga bisa didaftarkan lebih dari satu.
 
 ```javascript
-const { EventEmitter } = require("events");
+const { EventEmitter } = require('events');
 
 const myEventEmitter = new EventEmitter();
 
@@ -516,10 +504,10 @@ const makeBill = ({ price }) => {
   console.log(`Bill sebesar ${price} telah dibuat!`);
 };
 
-myEventEmitter.on("coffee-order", makeCoffee);
-myEventEmitter.on("coffee-order", makeBill);
+myEventEmitter.on('coffee-order', makeCoffee);
+myEventEmitter.on('coffee-order', makeBill);
 
-myEventEmitter.emit("coffee-order", { name: "Tubruk", price: 15000 });
+myEventEmitter.emit('coffee-order', { name: 'Tubruk', price: 15000 });
 
 /**
  * output:
@@ -531,7 +519,7 @@ myEventEmitter.emit("coffee-order", { name: "Tubruk", price: 15000 });
 Atau bisa juga menggunakan fungsi khusus untuk menangani event yang biasa disebut 'handler' atau 'listener'.
 
 ```javascript
-const { EventEmitter } = require("events");
+const { EventEmitter } = require('events');
 
 const myEventEmitter = new EventEmitter();
 
@@ -548,9 +536,9 @@ const onCoffeeOrderedListener = ({ name, price }) => {
   makeBill(price);
 };
 
-myEventEmitter.on("coffee-order", onCoffeeOrderedListener);
+myEventEmitter.on('coffee-order', onCoffeeOrderedListener);
 
-myEventEmitter.emit("coffee-order", { name: "Tubruk", price: 15000 });
+myEventEmitter.emit('coffee-order', { name: 'Tubruk', price: 15000 });
 
 /**
  * output:
@@ -599,7 +587,7 @@ Jawaban:
 
 ```javascript
 // TODO 1
-const { EventEmitter } = require("events");
+const { EventEmitter } = require('events');
 
 const birthdayEventListener = (name) => {
   console.log(`Happy birthday ${name}!`);
@@ -609,13 +597,11 @@ const birthdayEventListener = (name) => {
 const myEmitter = new EventEmitter();
 
 // TODO 3
-myEmitter.on("birthday", birthdayEventListener);
+myEmitter.on('birthday', birthdayEventListener);
 
 // TODO 4
-myEmitter.emit("birthday", "Suken");
+myEmitter.emit('birthday', 'Suken');
 ```
-
----
 
 # Filesystem
 
@@ -626,25 +612,25 @@ Node.js menyediakan core modules fs yang dapat mempermudah kita dalam mengakses 
 Untuk mengakses file akan menggunakan `fs.readFile()` dengan menerima tiga arguman taitu lokasi file, encoding, dan callback.
 
 ```javascript
-const fs = require("fs");
+const fs = require('fs');
 
 const fileReadCallback = (error, data) => {
   if (error) {
-    console.log("Gagal membaca berkas");
+    console.log('Gagal membaca berkas');
     return;
   }
   console.log(data);
 };
 
-fs.readFile("todo.txt", "UTF-8", fileReadCallback);
+fs.readFile('todo.txt', 'UTF-8', fileReadCallback);
 ```
 
 Kita juga bisa menggunakan method versih synchronous dengan menambahkan `Sync` di belakang methodnya. `fs.readFileSync().`
 
 ```javascript
-const fs = require("fs");
+const fs = require('fs');
 
-const data = fs.readFileSync("todo.txt", "UTF-8");
+const data = fs.readFileSync('todo.txt', 'UTF-8');
 console.log(data);
 ```
 
@@ -680,33 +666,31 @@ Jika berhasil, maka outputnya akan seperti ini:
 **Tips**: Bisa gunakan method
 
 ```javascript
-path.resolve(__dirname, "notes.txt");
+path.resolve(__dirname, 'notes.txt');
 ```
 
 Jawaban:
 
 ```javascript
-const fs = require("fs");
-const path = require("node:path");
+const fs = require('fs');
+const path = require('node:path');
 
-const data = fs.readFileSync(path.resolve(__dirname, "notes.txt"), "UTF-8");
+const data = fs.readFileSync(path.resolve(__dirname, 'notes.txt'), 'UTF-8');
 console.log(data);
 ```
-
----
 
 # Readable Stream
 
 Jika kita ingin membaca file yang besar, kita bisa menggunakan Readable Stream. Readable Stream akan membaca file secara perlahan-lahan dan tidak membebani memori. Dan cara memakainya adalah dengan menggunakan method `fs.createReadStream()`.
 
 ```javascript
-const fs = require("fs");
+const fs = require('fs');
 
-const readableStream = fs.createReadStream("./article.txt", {
+const readableStream = fs.createReadStream('./article.txt', {
   highWaterMark: 10,
 });
 
-readableStream.on("readable", () => {
+readableStream.on('readable', () => {
   try {
     process.stdout.write(`[${readableStream.read()}]`);
   } catch (error) {
@@ -714,8 +698,8 @@ readableStream.on("readable", () => {
   }
 });
 
-readableStream.on("end", () => {
-  console.log("Done");
+readableStream.on('end', () => {
+  console.log('Done');
 });
 ```
 
@@ -741,16 +725,14 @@ Outputnya akan seperti ini:
 ][Teknik str][eam merupa][kan salah ][satu konse][p fundamen][tal yang m][endukung a][plikasi No][deJS beker][ja. Teknik][ ini dapat][ menangani][ kasus bac][a tulis be][rkas, komu][nikasi jar][ingan, ata][u beban ke][rja apapun][ agar dapa][t berjalan][ dengan le][bih efisie][n.][null]Done
 ```
 
----
-
 # Writable Stream
 
 Untuk menggunakan Writable Stream, kita bisa menggunakan method `fs.createWriteStream()`.
 
 ```javascript
-const fs = require("fs");
+const fs = require('fs');
 
-const writableStream = fs.createWriteStream("output.txt");
+const writableStream = fs.createWriteStream('output.txt');
 ```
 
 Fungsi ini menerima argumen yaitu alamat file untuk menyimpan data nya, jika tidak ada file maka akan otomatis dibuat, tapi jika sudah ada maka akan menimpa isi file.
@@ -758,13 +740,13 @@ Fungsi ini menerima argumen yaitu alamat file untuk menyimpan data nya, jika tid
 Gunakan `write()` untuk menulis data di writeable stream
 
 ```javascript
-const fs = require("fs");
+const fs = require('fs');
 
-const writableStream = fs.createWriteStream("output.txt");
+const writableStream = fs.createWriteStream('output.txt');
 
-writableStream.write("Ini merupakan teks baris pertama!\n");
-writableStream.write("Ini merupakan teks baris kedua!\n");
-writableStream.end("Akhir dari writeable stream!"); // end digunakan untuk tanda akhir dari stream
+writableStream.write('Ini merupakan teks baris pertama!\n');
+writableStream.write('Ini merupakan teks baris kedua!\n');
+writableStream.end('Akhir dari writeable stream!'); // end digunakan untuk tanda akhir dari stream
 ```
 
 Outputnya akan seperti ini:
@@ -807,32 +789,33 @@ Solusi:
  * menggunakan teknik readable stream dan writable stream.
  */
 
-const fs = require("fs");
+const fs = require('fs');
 
-const readableStream = fs.createReadStream("input.txt", { highWaterMark: 15 });
+const readableStream = fs.createReadStream('input.txt', { highWaterMark: 15 });
 
-const writeableStream = fs.createWriteStream("output.txt");
+const writeableStream = fs.createWriteStream('output.txt');
 
-readableStream.on("readable", () => {
+readableStream.on('readable', () => {
   try {
     writeableStream.write(`${readableStream.read()}\n`);
   } catch (error) {
-    console.log("Bang error!");
+    console.log('Bang error!');
   }
 });
 
-readableStream.on("end", () => {
-  writeableStream.end("Akhir dari writeable"); // end digunakan untuk tanda akhir dari stream, dan ketika end dijalankan maka stream akan ditutup dan tidak bisa ditulis lagi. end juga bisa berada di dalam event readable.
-  console.log("Done");
-});m
+readableStream.on('end', () => {
+  writeableStream.end('Akhir dari writeable'); // end digunakan untuk tanda akhir dari stream, dan ketika end dijalankan maka stream akan ditutup dan tidak bisa ditulis lagi. end juga bisa berada di dalam event readable.
+  console.log('Done');
+});
+m;
 ```
 
 Bisa juga menggunakan path.resolve untuk menentukan path file.
 
 ```javascript
-const readableStream = fs.createReadStream(path.resolve(__dirname, "input.txt"), { highWaterMark: 15 });
+const readableStream = fs.createReadStream(path.resolve(__dirname, 'input.txt'), { highWaterMark: 15 });
 
-const writeableStream = fs.createWriteStream(path.resolve(__dirname, "output.txt"));
+const writeableStream = fs.createWriteStream(path.resolve(__dirname, 'output.txt'));
 ```
 
 [Video Dasar Dasar Node.js](https://youtu.be/_qN02jvqvLo)

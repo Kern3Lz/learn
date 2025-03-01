@@ -6,14 +6,10 @@
 - **Web Server** : melayani hosting sebuah program atau aplikasi (seperti Application Server) yang dapat diakses oleh client melalui internet maupun intranet.
 - **Database Server** : melayani penyimpanan dan pendistribusian data terstruktur.
 
----
-
 # Web Server dan Web Service
 
 - **Web Server** : Server yang dapat menjalankan program dan dapat diakses melalui internet atau intranet.
 - **Web Service** : Program yang dijalankan di web server agar kebutuhan bisnis terpenuhi.
-
----
 
 # Latihan: Membuat Permintaan HTTP (HTTP Request)
 
@@ -121,8 +117,6 @@ cache-control: no-cache
 
 Dari response di atas, kita bisa melihat bahwa pesanan gagal dilakukan. karena kita memesan kopi Luwak yang tidak tersedia. Dan terlihat **status code 404 Not Found**.
 
----
-
 # REST WEB Service
 
 REST atau **RE**presentational **S**tate **T**ransfer adalah salah satu gaya arsitektur yang dapat diadaptasi ketika membangun web service.
@@ -146,8 +140,6 @@ Beberapa sifat yang menjadi kunci di dalam REST API:
 - HTTP Verbs/Methods
 - HTTP Response Code
 - URL Design
-
----
 
 # Format Request dan Response
 
@@ -182,8 +174,6 @@ Contoh JSON dari url https://coffee-api.dicoding.dev/coffees:
 }
 ```
 
----
-
 # HTTP Verbs/Methods
 
 Kita dapat menggunakan beberapa metode HTTP untuk berinteraksi dengan REST API.
@@ -204,8 +194,6 @@ Status code bernilai 3 digit angka. Status code yang umum digunakan dalam REST A
 - **503** (Service Unavailable) - Permintaan client gagal dijalankan karena server tidak dapat menangani permintaan.
 
 Lebih detail tentang status code HTTP dapat dilihat di [MDN Status Code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status).
-
----
 
 # URL Design
 
