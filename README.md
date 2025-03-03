@@ -6,6 +6,6 @@ Repositori ini berisi kumpulan materi pembelajaran yang saya pelajari, baik dari
 
 - [Belajar Back-End Pemula dengan JavaScript](https://github.com/Kern3Lz/learn/tree/main/dicoding/backend-dicoding-js)
 
-- Belajar Front-End Pemula dengan HTML, CSS, dan JavaScript
+- Belajar Front-End Pemula
 
 - Belajar Dasar Pemrograman Web
