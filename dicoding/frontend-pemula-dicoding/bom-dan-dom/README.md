@@ -17,3 +17,5 @@ document.getElementById('heading').innerHTML = 'Hello World';
 ```
 
 ## Menjalankan JavaScript di Website
+
+Ada dua cara untuk memasukkan kode JavaScript ke dalam berkas HTML kita, yakni secara internal dan external.
