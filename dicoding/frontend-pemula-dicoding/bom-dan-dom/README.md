@@ -124,7 +124,7 @@ Namun, di beberapa kasus, kita perlu menyesuaikan kode JavaScript kita dengan en
 
 Berikut adalah representasi objek `window` di browser.
 
-![alt text](image.png)
+![alt text](img/image.png)
 
 Dan jika kita memaksa menjalankan kode JavaScript yang berjalan di luar Browser, maka akan terjadi error.
 
@@ -269,7 +269,7 @@ Di HTML, batang induk dari DOM Tree adalah elemen `<html>`. Di bawahnya ada elem
 
 Kurang lebih struktur DOM Tree dari kode di atas adalah sebagai berikut:
 
-![alt text](image-1.png)
+![alt text](img/image-1.png)
 
 ## Mencari DOM (Mendapatkan DOM)
 
@@ -467,3 +467,197 @@ gambar.setAttribute('height', 215);
 Hal ini terjadi karena JavaScript memiliki fitur _automatic type conversion_.
 
 ## Memanipulasi Konten Mlelaui ineerText, innerHTML, dan style.property
+
+### Perbedaan innerText dan innerHTML
+
+Pertama kita buat variabel baru untuk menampung elemen HTML yang akan kita manipulasi.
+
+```javascript
+const links = document.getElementById('links');
+```
+
+Kemudian jika kita panggil `innerHTML`, maka outputnya:
+
+![alt text](img/image-2.png)
+
+Sedaangkan jika kita panggil `innerText`, maka outputnya:
+
+![alt text](img/image-3.png)
+
+Jadi, ketika kita menggunakan `innerHTML` maka akan mengambil semua konten dalam sebuah elemen beserta tag-tag HTML nya. Sedangkan `innerText` hanya akan mengambil teks saja tanpa tag-tag HTML yang ada.
+
+### Manipulasi Konten dengan innerText
+
+Kita bisa mengubah konten dari elemen HTML dengan menggunakan `innerText`.
+
+```javascript
+links.innerText = 'Belajar Programming di Dicoding';
+```
+
+Kita akan ubah teks "Dicoding" menjadi "Belajar Programming di Dicoding". Pertama, kita akan mengambil elemen id-nya "dicodingLink" dan "googleLink".
+
+```javascript
+const dicoding = document.getElementById('dicodingLink');
+dicoding.innerText = 'Belajar Programming di Dicoding';
+
+const google = document.getElementById('googleLink');
+```
+
+### Manipulasi Konten dengan innerHTML
+
+Kita akan mengubah konten dari elemen HTML dengan menggunakan `innerHTML`. Di sini kita akan mengubah konten HTML dengan menambahkan tag `<i>`. Karena sebelumnya kita sudah menyimpan elemen dengan id "dicodingLink" ke dalam variabel `dicoding`.
+
+```javascript
+dicoding.innerHTML = '<i>Belajar Programming di Dicoding</i>';
+```
+
+Jadi, Jika kita melakukan assignment dengan string `"<i>Belajar Programming Dicoding</i>"` menggunakan `innerText`, maka teks akan muncul beserta tag HTML-nya. Sedangkan jika menggunakan `innerHTML` akan menjadi seperti berikut.
+
+![alt text](img/image-4.png)
+
+### Manipulasi Konten dengan style.propertySekar
+
+Sekarang kita akan membuat tombol tombol yang ada menjadi memiliki ujung yang melengkung. Pada kasus ini, kita ingin menambahkan style berupa border-radius dengan nilai "4px" dari semua button di atas.
+
+Kita tidak akan menggunakan `querySelectorAll()` dan kita akan menggunakan `getElementsByClassName()`.
+
+```javascript
+const buttons = document.getElementsByClassName('button');
+```
+
+Karena kita tidak menggunakan `querySelector` dan `querySelectorAll()` maka kita tidak perlu menuliskan selector nya. Dan untuk mendapatkan elemen HTML nya kita gunakan `children` yang mengembalikan HTMLCollection. Dan untuk mengakses elemen HTML nya kita gunakan index.
+
+```javascript
+for (const button of buttons) {
+  console.log(button.children[0]);
+}
+```
+
+Setelah mendapatkan elemen yang dituju (button, kita bisa mengakses memnaggil objek `style` dan property `borderRadius`.
+
+```javascript
+for (const button of buttons) {
+  button.children[0].style.borderRadius = '6px';
+}
+```
+
+Styling yang kita ingin ubah pada asalnya adalah `border-radius: 6px;`. Namun, karena nama properti dari objek DOM mengikuti standar penamaan variabel khusus. Penamaan properti CSS yang menggunakan tanda `-` (dash) akan diubah menjadi camelCase. Sehingga `border-radius` menjadi `borderRadius`.
+
+## Menambahkan Elemen HTML ke DOM
+
+Di materi ini kita akan belajar mengenaia 2 method yaitu `appendChild()` dan `insertBefore()`.
+
+Buat struktur HTML sederhana.
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Memasak Air</title>
+  </head>
+  <body>
+    <p id="name">Langkah-langkah memasak air</p>
+    <ol id="daftar">
+      <li id="awal">Masukkan air ke dalam wadah.</li>
+      <li id="akhir">Matikan kompor.</li>
+    </ol>
+    <hr size="2" width="95%" color="black" />
+  </body>
+</html>
+```
+
+> Catatan:
+> Pada tag `<hr>` terdapat atribut size, width, dan color. Atribut ini sudah usang (deprecated) dan tidak direkomendasikan lagi. Solusinya adalah menuliskan aturan styling menggunakan CSS.
+
+Dan ini hasilnya:
+
+![alt text](img/image-5.png)
+
+### Menambahkan Elemen HTML dengan appendChild()
+
+`appendChild` berfungsi untuk menambahkan atau menyisipkan sebuah child elemen ke bagian akhir dari sebuah elemen parent.
+
+Kita ingin menambahkan langkah baru yakni sebuah pesan berisi "Selamat penikmati".
+
+Sebelum kita memanggil elemen `<ol>`, kita kaan membaut sebuah elemen baru terlebih dahulu dengan method `createElement()`. Elemen yang kita ingin buat adalah `<li>`
+
+```javascript
+const newElement = document.createElement('li');
+```
+
+Selanjutnya kita akan masukkan konten teks "Selamat menikmati!" ke dalam `<li>` dengan menggunakan `innerText`.
+
+```javascript
+newElement.innerText = 'Selamat menikmati!';
+```
+
+Langkah selanjutnya kita akan mendapatkan parent elemen yakni elemen `<ol>`.
+
+```javascript
+const daftar = document.getElementById('daftar');
+```
+
+Dan ini jika kita lihat di browser:
+
+![alt text](img/image-6.png)
+
+Saat ini belum ada perubahan di layout HTML nya karena kita belum menambahkan elemen baru ke dalam elemen `<ol>`. Untuk menambahkan elemen baru ke dalam elemen `<ol>` kita bisa menggunakan method `appendChild()`.
+
+```javascript
+daftar.appendChild(newElement);
+```
+
+### Menambahkan Elemen HTML dengan insertBefore()
+
+Method `insertBefore()` memberikan kemampuan untuk menyisipkan elemen sebelum child elemen tertentu dalam parent element. Method ini menerima dua parameter, yakni (1) elemen yang akan disisipkan dan (2) child elemen yang akan dijadikan acuan.
+
+![alt text](img/image-7.png)
+
+Dari gambar diatas terdapat keanehan pada langkah ke-2. Kita akan memperbaiki langkah ke-2 dengan menambahkan langkah baru yakni "Hidupkan kompor".
+
+Pertama kita akan membuat elemen baru dengan method `createElement()`.
+
+```javascript
+const elementAwal = document.createElement('li');
+```
+
+Selanjutnya tuliskan pesan "Hidupkan kompor." ke dalam elemen baru tersebut.
+
+```javascript
+elementAwal.innerText = 'Hidupkan kompor.';
+```
+
+Langkah ketiga adalah mendapatkan parent elemen dari semua elemen `<li>` yaitu elemen `<ol>`. Namun, kita sudah mendeklarasi dan mengisialisasi variabel `daftar` sebelumnya.
+
+Di elemen `<ol>`, terlihat bahwa child element pertama punya atribut id dengan nilai "awal". Untuk memasukkan elmen baru di posisi awal kita butuh elemen yang punya atribut id "awal".
+
+```javascript
+const itemAwal = document.getElementById('awal');
+```
+
+Langkah terakhir adalah memanggil method `insertBefore()` pada variabel daftar.
+
+```javascript
+daftar.insertBefore(elementAwal, itemAwal);
+```
+
+## Rangkuman Browser Object Model (BOM) dan Document Object Model (DOM)
+
+Selamat! Anda sudah berada di penghujung materi Browser Object Model & Document Object Model. Sudah banyak materi yang Anda lewati dan pelajari. Mari kita uraikan seluruh materi yang sudah dipelajari untuk memperkuat ingatan.
+
+- Browser Object Model (BOM):
+  - Objek JavaScript yang tersedia di browser yang dapat digunakan untuk mengontrol browser.
+- Member dari BOM yang sering digunakan:
+  - alert: Menampilkan pop-up pesan pada browser.
+  - prompt: Menampilkan pop-up pesan yang dapat menerima input dari pengguna.
+  - console: Menampilkan pesan atau nilai pada console browser.
+- Document Object Model (DOM):
+  - Objek JavaScript yang tersedia di browser yang dapat digunakan untuk mengontrol dan memanipulasi konten yang ditampilkan pada website.
+- DOM Tree:
+  - Struktur Website dalam bentuk JavaScript objek yang terbentuk seperti bagan pohon.
+  - DOM Tree terbentuk berdasarkan dari struktur berkas HTML.
+- Teknik manipulasi DOM:
+  - Mendapatkan Elemen: document.querySelector, document.querySelectorAll, document.getElementById, dan sebagainya.
+  - Membuat Elemen: document.createElement.
+    Mengubah Konten: element.innerHTML, element.innerText, element.setAttribute(), dan sebagainya.
+  - Menambahkan Element: element.appendChild.
