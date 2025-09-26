@@ -1,0 +1,19 @@
+{
+  "name": "belajar-tailwind",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "tailwindcss -i ./src/css/input.css -o ./public/css/style.css --watch",
+    "minify": "tailwindcss -o ./public/css/final.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.13",
+    "tailwindcss": "^4.1.13"
+  }
+}
