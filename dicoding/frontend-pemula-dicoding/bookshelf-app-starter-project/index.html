@@ -5,33 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bookshelf App</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="style.css">
-  </head>
+    <link rel="stylesheet" href="style.css" />
     <script defer src="main.js"></script>
   </head>
   <body class="bg-gray-100 min-h-screen">
     <header>
-      <h1 class="text-s bg-blue-600 rounded-xl p-3 m-3 text-3xl text-white text-center font-bold max-w-3xl align-center mx-auto">Bookshelf App</h1>
+      <h1
+        class="text-s bg-blue-600 rounded-xl p-3 m-3 text-3xl text-white text-center font-bold max-w-3xl align-center mx-auto"
+      >
+        Bookshelf App
+      </h1>
     </header>
 
     <main class="pb-3 rounded-xl m-3 max-w-3xl align-center mx-auto">
-      <section class="border border-gray-300 rounded-xl shadow-md bg-white pb-3 mb-6">
-        <h2 class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3">Tambah Buku Baru</h2>
+      <section
+        class="border border-gray-300 rounded-xl shadow-md bg-white pb-3 mb-6"
+      >
+        <h2
+          class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3"
+        >
+          Tambah Buku Baru
+        </h2>
         <form id="bookForm" data-testid="bookForm" class="space-y-4 px-3">
           <div>
-            <label for="bookFormTitle" class="block mb-2 text-md font-medium">Judul</label>
-            <input id="bookFormTitle" type="text" required data-testid="bookFormTitleInput" placeholder="Judul Buku " class="bg-gray-50 border  text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2"/>
+            <label for="bookFormTitle" class="block mb-2 text-md font-medium"
+              >Judul</label
+            >
+            <input
+              id="bookFormTitle"
+              type="text"
+              required
+              data-testid="bookFormTitleInput"
+              placeholder="Judul Buku "
+              class="bg-gray-50 border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2"
+            />
           </div>
           <div>
-            <label for="bookFormAuthor" class="block mb-2 text-md font-medium">Penulis</label>
-            <input id="bookFormAuthor" type="text" required data-testid="bookFormAuthorInput" placeholder="Penulis Buku " class="bg-gray-50 border  text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2"/>
+            <label for="bookFormAuthor" class="block mb-2 text-md font-medium"
+              >Penulis</label
+            >
+            <input
+              id="bookFormAuthor"
+              type="text"
+              required
+              data-testid="bookFormAuthorInput"
+              placeholder="Penulis Buku "
+              class="bg-gray-50 border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2"
+            />
           </div>
           <div>
-            <label for="bookFormYear" class="block mb-2 text-md font-medium">Tahun</label>
-            <input id="bookFormYear" type="number" required data-testid="bookFormYearInput" placeholder="Tahun Buku " class="bg-gray-50 border  text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2"/>
+            <label for="bookFormYear" class="block mb-2 text-md font-medium"
+              >Tahun</label
+            >
+            <input
+              id="bookFormYear"
+              type="number"
+              required
+              data-testid="bookFormYearInput"
+              placeholder="Tahun Buku "
+              class="bg-gray-50 border text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2"
+            />
           </div>
           <div>
-            <label for="bookFormIsComplete" class="inline-block mb-2 text-md font-medium">Selesai dibaca</label>
+            <label
+              for="bookFormIsComplete"
+              class="inline-block mb-2 text-md font-medium"
+              >Selesai dibaca</label
+            >
             <input
               id="bookFormIsComplete"
               type="checkbox"
@@ -39,60 +79,143 @@
               class="text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-1 focus:outline-none ml-1 h-3 accent-blue-500"
             />
           </div>
-          <button id="bookFormSubmit" type="submit" data-testid="bookFormSubmitButton" class="w-full text-white bg-sky-500 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-            Masukkan Buku ke rak <span class="font-bold text-sm">Belum selesai dibaca</span>
+          <button
+            id="bookFormSubmit"
+            type="submit"
+            data-testid="bookFormSubmitButton"
+            class="w-full text-white bg-sky-500 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Masukkan Buku ke rak
+            <span class="font-bold text-sm">Belum selesai dibaca</span>
           </button>
         </form>
       </section>
 
-      <section class="border border-gray-300 rounded-xl shadow-md bg-white pb-3 mb-6">
-        <h2 class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3">Cari Buku</h2>
-        <form id="searchBook" data-testid="searchBookForm" class="flex items-center px-3 space-x-2">
-          <label for="searchBookTitle" class="inline-block text-md font-medium">Judul</label>
-          <input id="searchBookTitle" type="text" data-testid="searchBookFormTitleInput" class="bg-gray-50 border  text-sm rounded-lg focus:ring-blue-500 p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2 w-full"/>
-          <button id="searchSubmit" type="submit" data-testid="searchBookFormSubmitButton" class="text-white bg-sky-500 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+      <section
+        class="border border-gray-300 rounded-xl shadow-md bg-white pb-3 mb-6"
+      >
+        <h2
+          class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3"
+        >
+          Cari Buku
+        </h2>
+        <form
+          id="searchBook"
+          data-testid="searchBookForm"
+          class="flex items-center px-3 space-x-2"
+        >
+          <label for="searchBookTitle" class="inline-block text-md font-medium"
+            >Judul</label
+          >
+          <input
+            id="searchBookTitle"
+            type="text"
+            data-testid="searchBookFormTitleInput"
+            class="bg-gray-50 border text-sm rounded-lg focus:ring-blue-500 p-2.5 border-gray-600 placeholder-gray-400 text-black focus:border-blue-500 focus:outline-none focus:ring-2 w-full"
+          />
+          <button
+            id="searchSubmit"
+            type="submit"
+            data-testid="searchBookFormSubmitButton"
+            class="text-white bg-sky-500 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+            onclick="searchBook()"
+          >
             Cari
           </button>
         </form>
       </section>
 
-      <section class="mb-6 border border-gray-300 rounded-xl shadow-md bg-white pb-3">
-        <h2 class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3">Belum selesai dibaca</h2>
+      <section
+        class="mb-6 border border-gray-300 rounded-xl shadow-md bg-white pb-3"
+      >
+        <h2
+          class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3"
+        >
+          Belum selesai dibaca
+        </h2>
 
         <div id="incompleteBookList" data-testid="incompleteBookList">
           <!-- 
             Ini adalah struktur HTML untuk masing-masing buku.
             Pastikan susunan elemen beserta atribut data-testid menyesuaikan seperti contoh ini.
           -->
-          <div data-bookid="123123123" data-testid="bookItem" class="mb-3 border border-gray-300 rounded-xl shadow-md bg-gray-50 p-3 mx-3">
-            <h3 data-testid="bookItemTitle" class="text-lg font-semibold">Judul Buku 1</h3>
+          <div
+            data-bookid="123123123"
+            data-testid="bookItem"
+            class="mb-3 border border-gray-300 rounded-xl shadow-md bg-gray-50 p-3 mx-3"
+          >
+            <h3 data-testid="bookItemTitle" class="text-lg font-semibold">
+              Judul Buku 1
+            </h3>
             <p data-testid="bookItemAuthor">Penulis: Penulis Buku 1</p>
             <p data-testid="bookItemYear">Tahun: 2030</p>
             <div class="mt-2">
-              <button data-testid="bookItemIsCompleteButton" class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg focus:ring-blue-500 focus:ring-1 focus:outline-none ml-1 accent-blue-500 text-sm px-5 py-2.5">Selesai dibaca</button>
-              <button data-testid="bookItemDeleteButton" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1">Hapus Buku</button>
-              <button data-testid="bookItemEditButton" class="bg-yellow-400 hover:bg-yellow-500 rounded-lg focus:ring-yellow-500 focus:ring-1 focus:outline-none ml-1 accent-yellow-500 text-sm px-5 py-2.5">Edit Buku</button>
+              <button
+                data-testid="bookItemIsCompleteButton"
+                class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg focus:ring-blue-500 focus:ring-1 focus:outline-none ml-1 accent-blue-500 text-sm px-5 py-2.5"
+              >
+                Selesai dibaca
+              </button>
+              <button
+                data-testid="bookItemDeleteButton"
+                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1"
+              >
+                Hapus Buku
+              </button>
+              <button
+                data-testid="bookItemEditButton"
+                class="bg-yellow-400 hover:bg-yellow-500 rounded-lg focus:ring-yellow-500 focus:ring-1 focus:outline-none ml-1 accent-yellow-500 text-sm px-5 py-2.5"
+              >
+                Edit Buku
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="border border-gray-300 rounded-xl shadow-md bg-white pb-3">
-        <h2 class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3">Selesai dibaca</h2>
+      <section
+        class="border border-gray-300 rounded-xl shadow-md bg-white pb-3"
+      >
+        <h2
+          class="text-2xl font-semibold text-center bg-blue-400 text-white rounded-t-xl p-2 mb-3"
+        >
+          Selesai dibaca
+        </h2>
 
         <div id="completeBookList" data-testid="completeBookList">
           <!-- 
             Ini adalah struktur HTML untuk masing-masing buku.
             Pastikan susunan elemen beserta atribut data-testid menyesuaikan seperti contoh ini.
           -->
-          <div data-bookid="456456456" data-testid="bookItem" class="mb-3 border border-gray-300 rounded-xl shadow-md bg-gray-50 p-3 mx-3">
-            <h3 data-testid="bookItemTitle" class="text-lg font-semibold">Judul Buku 2</h3>
+          <div
+            data-bookid="456456456"
+            data-testid="bookItem"
+            class="mb-3 border border-gray-300 rounded-xl shadow-md bg-gray-50 p-3 mx-3"
+          >
+            <h3 data-testid="bookItemTitle" class="text-lg font-semibold">
+              Judul Buku 2
+            </h3>
             <p data-testid="bookItemAuthor">Penulis: Penulis Buku 2</p>
             <p data-testid="bookItemYear">Tahun: 2030</p>
             <div>
-              <button data-testid="bookItemIsCompleteButton" class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg focus:ring-blue-500 focus:ring-1 focus:outline-none ml-1 accent-blue-500 text-sm px-5 py-2.5">Selesai dibaca</button>
-              <button data-testid="bookItemDeleteButton" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1">Hapus Buku</button>
-              <button data-testid="bookItemEditButton" class="bg-yellow-400 hover:bg-yellow-500 rounded-lg focus:ring-yellow-500 focus:ring-1 focus:outline-none ml-1 accent-yellow-500 text-sm px-5 py-2.5">Edit Buku</button>
+              <button
+                data-testid="bookItemIsCompleteButton"
+                class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg focus:ring-blue-500 focus:ring-1 focus:outline-none ml-1 accent-blue-500 text-sm px-5 py-2.5"
+              >
+                Selesai dibaca
+              </button>
+              <button
+                data-testid="bookItemDeleteButton"
+                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1"
+              >
+                Hapus Buku
+              </button>
+              <button
+                data-testid="bookItemEditButton"
+                class="bg-yellow-400 hover:bg-yellow-500 rounded-lg focus:ring-yellow-500 focus:ring-1 focus:outline-none ml-1 accent-yellow-500 text-sm px-5 py-2.5"
+              >
+                Edit Buku
+              </button>
             </div>
           </div>
         </div>
