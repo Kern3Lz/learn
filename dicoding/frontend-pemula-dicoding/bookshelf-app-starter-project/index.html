@@ -27,6 +27,7 @@
           Tambah Buku Baru
         </h2>
         <form id="bookForm" data-testid="bookForm" class="space-y-4 px-3">
+          <input type="text" id="bookFormID" hidden />
           <div>
             <label for="bookFormTitle" class="block mb-2 text-md font-medium"
               >Judul</label
@@ -118,7 +119,6 @@
             type="submit"
             data-testid="searchBookFormSubmitButton"
             class="text-white bg-sky-500 hover:bg-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-            onclick="searchBook()"
           >
             Cari
           </button>
@@ -134,43 +134,7 @@
           Belum selesai dibaca
         </h2>
 
-        <div id="incompleteBookList" data-testid="incompleteBookList">
-          <!-- 
-            Ini adalah struktur HTML untuk masing-masing buku.
-            Pastikan susunan elemen beserta atribut data-testid menyesuaikan seperti contoh ini.
-          -->
-          <div
-            data-bookid="123123123"
-            data-testid="bookItem"
-            class="mb-3 border border-gray-300 rounded-xl shadow-md bg-gray-50 p-3 mx-3"
-          >
-            <h3 data-testid="bookItemTitle" class="text-lg font-semibold">
-              Judul Buku 1
-            </h3>
-            <p data-testid="bookItemAuthor">Penulis: Penulis Buku 1</p>
-            <p data-testid="bookItemYear">Tahun: 2030</p>
-            <div class="mt-2">
-              <button
-                data-testid="bookItemIsCompleteButton"
-                class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg focus:ring-blue-500 focus:ring-1 focus:outline-none ml-1 accent-blue-500 text-sm px-5 py-2.5"
-              >
-                Selesai dibaca
-              </button>
-              <button
-                data-testid="bookItemDeleteButton"
-                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1"
-              >
-                Hapus Buku
-              </button>
-              <button
-                data-testid="bookItemEditButton"
-                class="bg-yellow-400 hover:bg-yellow-500 rounded-lg focus:ring-yellow-500 focus:ring-1 focus:outline-none ml-1 accent-yellow-500 text-sm px-5 py-2.5"
-              >
-                Edit Buku
-              </button>
-            </div>
-          </div>
-        </div>
+        <div id="incompleteBookList" data-testid="incompleteBookList"></div>
       </section>
 
       <section
@@ -182,43 +146,7 @@
           Selesai dibaca
         </h2>
 
-        <div id="completeBookList" data-testid="completeBookList">
-          <!-- 
-            Ini adalah struktur HTML untuk masing-masing buku.
-            Pastikan susunan elemen beserta atribut data-testid menyesuaikan seperti contoh ini.
-          -->
-          <div
-            data-bookid="456456456"
-            data-testid="bookItem"
-            class="mb-3 border border-gray-300 rounded-xl shadow-md bg-gray-50 p-3 mx-3"
-          >
-            <h3 data-testid="bookItemTitle" class="text-lg font-semibold">
-              Judul Buku 2
-            </h3>
-            <p data-testid="bookItemAuthor">Penulis: Penulis Buku 2</p>
-            <p data-testid="bookItemYear">Tahun: 2030</p>
-            <div>
-              <button
-                data-testid="bookItemIsCompleteButton"
-                class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg focus:ring-blue-500 focus:ring-1 focus:outline-none ml-1 accent-blue-500 text-sm px-5 py-2.5"
-              >
-                Selesai dibaca
-              </button>
-              <button
-                data-testid="bookItemDeleteButton"
-                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1"
-              >
-                Hapus Buku
-              </button>
-              <button
-                data-testid="bookItemEditButton"
-                class="bg-yellow-400 hover:bg-yellow-500 rounded-lg focus:ring-yellow-500 focus:ring-1 focus:outline-none ml-1 accent-yellow-500 text-sm px-5 py-2.5"
-              >
-                Edit Buku
-              </button>
-            </div>
-          </div>
-        </div>
+        <div id="completeBookList" data-testid="completeBookList"></div>
       </section>
     </main>
   </body>

@@ -2,6 +2,8 @@
 
 let buku = [];
 const RENDER_EVENT = "render-book";
+const submitForm = document.getElementById("bookForm");
+const submitFormButton = document.getElementById("bookFormSubmit");
 
 function generatedBookID() {
   return +new Date();
@@ -103,22 +105,30 @@ function changeBookStatus(bookId) {
 }
 
 function deleteBook(bookId) {
-  buku = buku.filter((bookItem) => bookItem.id !== bookId);
-  localStorage.setItem("buku", JSON.stringify(buku));
   if (confirm("Apakah anda yakin ingin menghapus buku ini?")) {
-    alert("Buku berhasil dihapus");
+    buku = buku.filter((bookItem) => bookItem.id !== bookId);
+    localStorage.setItem("buku", JSON.stringify(buku));
+    alert("Buku berhasil dihapus!");
+    document.dispatchEvent(new Event(RENDER_EVENT));
   }
-  document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
 function editBook(bookId) {
-  const bookToEdit = buku.find((bookItem) => bookItem.id === bookId);
-  document.getElementById("bookFormTitle").value = bookToEdit.title;
-  document.getElementById("bookFormAuthor").value = bookToEdit.author;
-  document.getElementById("bookFormYear").value = bookToEdit.year;
-  document.getElementById("bookFormIsComplete").checked = bookToEdit.isComplete;
-  deleteBook(bookId);
-  localStorage.setItem("buku", JSON.stringify(buku));
+  if (confirm("Apakah anda yakin ingin mengedit buku ini?")) {
+    alert("Silahkan edit data pada form diatas!");
+    const bookToEdit = buku.findIndex((bookItem) => bookItem.id === bookId);
+
+    document.getElementById("bookFormID").value = buku[bookToEdit].id;
+    document.getElementById("bookFormTitle").value = buku[bookToEdit].title;
+    document.getElementById("bookFormAuthor").value = buku[bookToEdit].author;
+    document.getElementById("bookFormYear").value = buku[bookToEdit].year;
+    document.getElementById("bookFormIsComplete").checked =
+      buku[bookToEdit].isComplete;
+
+    submitFormButton.innerText = "Simpan Perubahan";
+
+    document.dispatchEvent(new Event(RENDER_EVENT));
+  }
 }
 
 let searchBook = document.getElementById("searchBook");
@@ -142,12 +152,35 @@ searchBook.addEventListener("submit", function (event) {
 
 document.addEventListener("DOMContentLoaded", function () {
   loadDataFromStorage();
-  const submitForm = document.getElementById("bookForm");
   submitForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    addBook();
-    alert("Buku berhasil ditambahkan!");
+    const editBookID = document.getElementById("bookFormID").value;
+
+    if (editBookID) {
+      const bookToEdit = buku.findIndex(
+        (bookItem) => bookItem.id == editBookID
+      );
+      buku[bookToEdit].title = document.getElementById("bookFormTitle").value;
+      buku[bookToEdit].author = document.getElementById("bookFormAuthor").value;
+      buku[bookToEdit].year = parseInt(
+        document.getElementById("bookFormYear").value
+      );
+      buku[bookToEdit].isComplete =
+        document.getElementById("bookFormIsComplete").checked;
+      alert("Buku berhasil diedit!");
+    } else {
+      addBook();
+      alert("Buku berhasil ditambahkan!");
+    }
+    localStorage.setItem("buku", JSON.stringify(buku));
+    document.getElementById("bookFormID").value = "";
     submitForm.reset();
+    submitFormButton.innerText = "Masukkan Buku ke rak";
+    const bookStatus = document.createElement("span");
+    bookStatus.classList.add("font-bold", "text-sm");
+    bookStatus.innerText = " Belum selesai dibaca";
+    submitFormButton.appendChild(bookStatus);
+    document.dispatchEvent(new Event(RENDER_EVENT));
   });
 });
 
